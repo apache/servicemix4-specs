@@ -36,10 +36,11 @@
 
   <modules>
       <module>locator</module>
-      <module>saaj-api</module>
-      <module>stax-api</module>
-      <module>jaxb-api</module>
-      <module>jaxws-api</module>
+      <module>saaj-api-1.3</module>
+      <module>stax-api-1.0</module>
+      <module>jaxb-api-2.0</module>
+      <module>jaxws-api-2.0</module>
+      <module>jaxws-api-2.1</module>
   </modules>
 
   <scm>

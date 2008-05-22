@@ -28,18 +28,12 @@
   </parent>
 
   <groupId>org.apache.servicemix.specs</groupId>
-  <artifactId>org.apache.servicemix.specs.jaxb-api-2.0</artifactId>
+  <artifactId>org.apache.servicemix.specs.stax-api-1.0</artifactId>
   <packaging>bundle</packaging>
   <version>1.0-SNAPSHOT</version>
-  <name>Apache ServiceMix Specs :: JAXB API</name>
+  <name>Apache ServiceMix Specs :: STAX API 1.0</name>
 
   <dependencies>
-    <dependency>
-      <groupId>org.apache.servicemix.specs</groupId>
-      <artifactId>org.apache.servicemix.specs.locator</artifactId>
-      <version>${project.version}</version>
-      <optional>true</optional>
-    </dependency>
     <dependency>
       <groupId>org.apache.geronimo.specs</groupId>
       <artifactId>geronimo-stax-api_1.0_spec</artifactId>
@@ -47,9 +41,9 @@
       <optional>true</optional>
     </dependency>
     <dependency>
-      <groupId>org.apache.geronimo.specs</groupId>
-      <artifactId>geronimo-activation_1.1_spec</artifactId>
-      <version>${geronimo.activation.version}</version>
+      <groupId>org.apache.servicemix.specs</groupId>
+      <artifactId>org.apache.servicemix.specs.locator</artifactId>
+      <version>${project.version}</version>
       <optional>true</optional>
     </dependency>
   </dependencies>
@@ -69,7 +63,7 @@
               <configuration>
                   <instructions>
                       <Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
-                      <Export-Package>javax.xml.bind*;version=2.0;-split-package:=merge-first</Export-Package>
+                      <Export-Package>javax.xml.stream*;version=1.0;-split-package:=merge-first</Export-Package>
                       <Import-Package>*</Import-Package>
                       <Private-Package>org.apache.servicemix.specs.locator</Private-Package>
                       <Bundle-Activator>org.apache.servicemix.specs.locator.Activator</Bundle-Activator>
