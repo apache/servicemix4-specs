@@ -39,7 +39,6 @@
       <artifactId>axis2-jaxws-api</artifactId>
       <version>1.3</version>
       <optional>true</optional>
-      <scope>provided</scope>
       <exclusions>
         <exclusion>
           <groupId>commons-logging</groupId>

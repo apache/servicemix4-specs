@@ -39,7 +39,6 @@
       <artifactId>org.apache.servicemix.specs.locator</artifactId>
       <version>${pom.version}</version>
       <optional>true</optional>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.servicemix.specs</groupId>
