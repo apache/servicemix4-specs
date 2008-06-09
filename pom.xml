@@ -113,6 +113,12 @@
           <name>Apache ServiceMix Repository</name>
           <url>http://svn.apache.org/repos/asf/servicemix/m2-repo</url>
       </pluginRepository>
+      <!-- JApiDiff-->
+      <pluginRepository>
+          <id>japidiff</id>
+          <name>JApiDiff Repository</name>
+          <url>http://japidiff.googlecode.com/svn/m2-repo</url>
+      </pluginRepository>
   </pluginRepositories>
 
   <dependencyManagement>

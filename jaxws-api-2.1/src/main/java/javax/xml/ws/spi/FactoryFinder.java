@@ -171,7 +171,7 @@ class FactoryFinder {
                     
 			        try {
 			            // If we are deployed into an OSGi environment, leverage it
-			            Class spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(factoryId);
+			            Class spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(iFactoryId);
 			            if (spiClass != null) {
 			                return spiClass.newInstance();
 			            }
