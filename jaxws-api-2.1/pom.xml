@@ -132,8 +132,7 @@
                         <Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
                         <Export-Package>javax.xml.ws*;version=2.1;-split-package:=merge-first</Export-Package>
                         <Import-Package>*</Import-Package>
-                        <Private-Package>org.apache.servicemix.specs.locator;-split-package:=merge-first
-                        </Private-Package>
+                        <Private-Package>org.apache.servicemix.specs.locator;-split-package:=merge-first</Private-Package>
                         <Bundle-Activator>org.apache.servicemix.specs.locator.Activator</Bundle-Activator>
                         <Implementation-Title>Apache ServiceMix</Implementation-Title>
                         <Implementation-Version>${project.version}</Implementation-Version>
@@ -159,9 +158,14 @@
                             </artifactSet>
                             <filters>
                                 <filter>
-                                    <artifact>${project.groupId}:${project.artifactId}</artifact>
+                                    <artifact>org.apache.axis2:axis2-jaxws-api</artifact>
                                     <excludes>
                                         <exclude>javax/**</exclude>
+                                    </excludes>
+                                </filter>
+                                <filter>
+                                    <artifact>org.apache.servicemix.specs:org.apache.servicemix.specs.locator</artifact>
+                                    <excludes>
                                         <exclude>org/**</exclude>
                                     </excludes>
                                 </filter>
