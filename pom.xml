@@ -159,7 +159,7 @@
                 <plugin>
                     <groupId>com.google.code.japidiff</groupId>
                     <artifactId>maven-japidiff-plugin</artifactId>
-                    <version>1.1</version>
+                    <version>1.2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
