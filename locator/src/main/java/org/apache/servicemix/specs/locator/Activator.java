@@ -16,24 +16,26 @@
  */
 package org.apache.servicemix.specs.locator;
 
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Enumeration;
-import java.util.concurrent.Callable;
-import java.net.URL;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.SynchronousBundleListener;
-import org.osgi.framework.Bundle;
 
 public class Activator implements BundleActivator, SynchronousBundleListener {
 
     private BundleContext bundleContext;
-    private Map<Long, Map<String, Callable<Class>>> factories = new HashMap<Long, Map<String, Callable<Class>>>();
+    private ConcurrentMap<Long, Map<String, Callable<Class>>> factories = new ConcurrentHashMap<Long, Map<String, Callable<Class>>>();
 
     public synchronized void start(BundleContext bundleContext) throws Exception {
         this.bundleContext = bundleContext;
@@ -50,7 +52,7 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
         this.bundleContext = null;
     }
 
-    public synchronized void bundleChanged(BundleEvent event) {
+    public void bundleChanged(BundleEvent event) {
         if (event.getType() == BundleEvent.RESOLVED) {
             register(event.getBundle());
         } else if (event.getType() == BundleEvent.UNRESOLVED) {
@@ -98,5 +100,4 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
             }
         }
     }
-
 }
