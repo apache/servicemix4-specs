@@ -47,7 +47,7 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
 
     public synchronized void stop(BundleContext bundleContext) throws Exception {
         while (!factories.isEmpty()) {
-            unregister(bundleContext.getBundle(factories.keySet().iterator().next()));
+            unregister(factories.keySet().iterator().next());
         }
         this.bundleContext = null;
     }
@@ -56,7 +56,7 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
         if (event.getType() == BundleEvent.RESOLVED) {
             register(event.getBundle());
         } else if (event.getType() == BundleEvent.UNRESOLVED) {
-            unregister(event.getBundle());
+            unregister(event.getBundle().getBundleId());
         }
     }
 
@@ -92,8 +92,8 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
         }
     }
 
-    protected void unregister(Bundle bundle) {
-        Map<String, Callable<Class>> map = factories.remove(bundle.getBundleId());
+    protected void unregister(long bundleId) {
+        Map<String, Callable<Class>> map = factories.remove(bundleId);
         if (map != null) {
             for (Map.Entry<String, Callable<Class>> entry : map.entrySet()) {
                 OsgiLocator.unregister(entry.getKey(), entry.getValue());
