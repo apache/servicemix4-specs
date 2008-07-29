@@ -61,4 +61,20 @@ public class OsgiLocator {
         return null;
     }
 
+	public static synchronized List<Class> locateAll(String factoryId) {
+		List<Class> classes = new ArrayList<Class>();
+        if (factories != null) {
+            List<Callable<Class>> l = factories.get(factoryId);
+            if (l != null) {
+                for (Callable<Class> c : l) {
+                	try {
+                    	classes.add(c.call());
+                	} catch (Exception e) {
+                	}
+				}
+            }
+        }
+        return classes;
+	}
+
 }
