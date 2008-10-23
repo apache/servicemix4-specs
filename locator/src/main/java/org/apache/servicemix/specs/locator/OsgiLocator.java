@@ -26,6 +26,9 @@ public class OsgiLocator {
 
     private static Map<String, List<Callable<Class>>> factories;
 
+    private OsgiLocator() {
+    }
+
     public static synchronized void unregister(String id, Callable<Class> factory) {
         if (factories != null) {
             List<Callable<Class>> l = factories.get(id);

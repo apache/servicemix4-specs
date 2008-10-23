@@ -34,33 +34,60 @@ import org.osgi.framework.SynchronousBundleListener;
 
 public class Activator implements BundleActivator, SynchronousBundleListener {
 
-    private BundleContext bundleContext;
+    private static boolean debug = false;
+
     private ConcurrentMap<Long, Map<String, Callable<Class>>> factories = new ConcurrentHashMap<Long, Map<String, Callable<Class>>>();
+
+    private BundleContext bundleContext;
+
+    static {
+        try {
+            String prop = System.getProperty("org.apache.servicemix.specs.debug");
+            debug = prop != null && !"false".equals(prop);
+        } catch (Throwable t) { }
+    }
+
+    /**
+     * <p>Output debugging messages.</p>
+     *
+     * @param msg <code>String</code> to print to <code>stderr</code>.
+     */
+    private void debugPrintln(String msg) {
+        if (debug) {
+            System.err.println("Spec(" + bundleContext.getBundle().getBundleId() + "): " + msg);
+        }
+    }
 
     public synchronized void start(BundleContext bundleContext) throws Exception {
         this.bundleContext = bundleContext;
+        debugPrintln("activating");
         bundleContext.addBundleListener(this);
         for (Bundle bundle : bundleContext.getBundles()) {
             register(bundle);
         }
+        debugPrintln("activated");
     }
 
     public synchronized void stop(BundleContext bundleContext) throws Exception {
+        debugPrintln("deactivating");
+        bundleContext.removeBundleListener(this);
         while (!factories.isEmpty()) {
             unregister(factories.keySet().iterator().next());
         }
+        debugPrintln("deactivated");
         this.bundleContext = null;
     }
 
     public void bundleChanged(BundleEvent event) {
         if (event.getType() == BundleEvent.RESOLVED) {
             register(event.getBundle());
-        } else if (event.getType() == BundleEvent.UNRESOLVED) {
+        } else if (event.getType() == BundleEvent.UNRESOLVED || event.getType() == BundleEvent.UNINSTALLED) {
             unregister(event.getBundle().getBundleId());
         }
     }
 
     protected void register(final Bundle bundle) {
+        debugPrintln("checking bundle " + bundle.getBundleId());
         Map<String, Callable<Class>> map = factories.get(bundle.getBundleId());
         Enumeration e = bundle.findEntries("META-INF/services/", "*", false);
         if (e != null) {
@@ -77,16 +104,27 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
                 }
                 map.put(factoryId, new Callable<Class>() {
                     public Class call() throws Exception {
-                        BufferedReader br = new BufferedReader(new InputStreamReader(u.openStream(), "UTF-8"));
-                        String factoryClassName = br.readLine();
-                        br.close();
-                        return bundle.loadClass(factoryClassName);
+                        try {
+                            debugPrintln("creating factory for key: " + factoryId);
+                            BufferedReader br = new BufferedReader(new InputStreamReader(u.openStream(), "UTF-8"));
+                            String factoryClassName = br.readLine();
+                            br.close();
+                            debugPrintln("factory implementation: " + factoryClassName);
+                            return bundle.loadClass(factoryClassName);
+                        } catch (Exception e) {
+                            debugPrintln("exception caught while creating factory: " + e);
+                            throw e;
+                        } catch (Error e) {
+                            debugPrintln("error caught while creating factory: " + e);
+                            throw e;
+                        }
                     }
                 });
             }
         }
         if (map != null) {
             for (Map.Entry<String, Callable<Class>> entry : map.entrySet()) {
+                debugPrintln("registering service for key " + entry.getKey());
                 OsgiLocator.register(entry.getKey(), entry.getValue());
             }
         }
@@ -96,6 +134,7 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
         Map<String, Callable<Class>> map = factories.remove(bundleId);
         if (map != null) {
             for (Map.Entry<String, Callable<Class>> entry : map.entrySet()) {
+                debugPrintln("unregistering service for key " + entry.getKey());
                 OsgiLocator.unregister(entry.getKey(), entry.getValue());
             }
         }
