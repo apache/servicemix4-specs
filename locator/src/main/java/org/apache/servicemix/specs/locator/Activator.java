@@ -61,9 +61,14 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
     public synchronized void start(BundleContext bundleContext) throws Exception {
         this.bundleContext = bundleContext;
         debugPrintln("activating");
+        debugPrintln("adding bundle listener");
         bundleContext.addBundleListener(this);
+        debugPrintln("checking existing bundles");
         for (Bundle bundle : bundleContext.getBundles()) {
-            register(bundle);
+            if (bundle.getState() == Bundle.RESOLVED || bundle.getState() == Bundle.STARTING ||
+                    bundle.getState() == Bundle.ACTIVE || bundle.getState() == Bundle.STOPPING) {
+                register(bundle);
+            }
         }
         debugPrintln("activated");
     }
@@ -102,29 +107,12 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
                     map = new HashMap<String, Callable<Class>>();
                     factories.put(bundle.getBundleId(), map);
                 }
-                map.put(factoryId, new Callable<Class>() {
-                    public Class call() throws Exception {
-                        try {
-                            debugPrintln("creating factory for key: " + factoryId);
-                            BufferedReader br = new BufferedReader(new InputStreamReader(u.openStream(), "UTF-8"));
-                            String factoryClassName = br.readLine();
-                            br.close();
-                            debugPrintln("factory implementation: " + factoryClassName);
-                            return bundle.loadClass(factoryClassName);
-                        } catch (Exception e) {
-                            debugPrintln("exception caught while creating factory: " + e);
-                            throw e;
-                        } catch (Error e) {
-                            debugPrintln("error caught while creating factory: " + e);
-                            throw e;
-                        }
-                    }
-                });
+                map.put(factoryId, new BundleFactoryLoader(factoryId, u, bundle));
             }
         }
         if (map != null) {
             for (Map.Entry<String, Callable<Class>> entry : map.entrySet()) {
-                debugPrintln("registering service for key " + entry.getKey());
+                debugPrintln("registering service for key " + entry.getKey() + "with value " + entry.getValue());
                 OsgiLocator.register(entry.getKey(), entry.getValue());
             }
         }
@@ -134,8 +122,56 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
         Map<String, Callable<Class>> map = factories.remove(bundleId);
         if (map != null) {
             for (Map.Entry<String, Callable<Class>> entry : map.entrySet()) {
-                debugPrintln("unregistering service for key " + entry.getKey());
+                debugPrintln("unregistering service for key " + entry.getKey() + "with value " + entry.getValue());
                 OsgiLocator.unregister(entry.getKey(), entry.getValue());
+            }
+        }
+    }
+
+    private class BundleFactoryLoader implements Callable<Class> {
+        private final String factoryId;
+        private final URL u;
+        private final Bundle bundle;
+
+        public BundleFactoryLoader(String factoryId, URL u, Bundle bundle) {
+            this.factoryId = factoryId;
+            this.u = u;
+            this.bundle = bundle;
+        }
+
+        public Class call() throws Exception {
+            try {
+                debugPrintln("creating factory for key: " + factoryId);
+                BufferedReader br = new BufferedReader(new InputStreamReader(u.openStream(), "UTF-8"));
+                String factoryClassName = br.readLine();
+                br.close();
+                debugPrintln("factory implementation: " + factoryClassName);
+                return bundle.loadClass(factoryClassName);
+            } catch (Exception e) {
+                debugPrintln("exception caught while creating factory: " + e);
+                throw e;
+            } catch (Error e) {
+                debugPrintln("error caught while creating factory: " + e);
+                throw e;
+            }
+        }
+
+        @Override
+        public String toString() {
+           return u.toString();
+        }
+
+        @Override
+        public int hashCode() {
+           return u.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof BundleFactoryLoader) {
+                return u.equals(((BundleFactoryLoader) obj).u);
+            } else {
+                return false;
             }
         }
     }

@@ -21,17 +21,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 
 public class OsgiLocator {
 
-    private static Map<String, List<Callable<Class>>> factories;
+    private static Map<String, Set<Callable<Class>>> factories;
 
     private OsgiLocator() {
     }
 
     public static synchronized void unregister(String id, Callable<Class> factory) {
         if (factories != null) {
-            List<Callable<Class>> l = factories.get(id);
+            Set<Callable<Class>> l = factories.get(id);
             if (l != null) {
                 l.remove(factory);
             }
@@ -40,11 +42,11 @@ public class OsgiLocator {
 
     public static synchronized void register(String id, Callable<Class> factory) {
         if (factories == null) {
-            factories = new HashMap<String, List<Callable<Class>>>();
+            factories = new HashMap<String, Set<Callable<Class>>>();
         }
-        List<Callable<Class>> l = factories.get(id);
+        Set<Callable<Class>> l = factories.get(id);
         if (l ==  null) {
-            l = new ArrayList<Callable<Class>>();
+            l = new HashSet<Callable<Class>>();
             factories.put(id, l);
         }
         l.add(factory);
@@ -52,9 +54,9 @@ public class OsgiLocator {
 
     public static synchronized Class locate(String factoryId) {
         if (factories != null) {
-            List<Callable<Class>> l = factories.get(factoryId);
+            Set<Callable<Class>> l = factories.get(factoryId);
             if (l != null && !l.isEmpty()) {
-                Callable<Class> c = l.get(0);
+                Callable<Class> c = l.iterator().next();
                 try {
                     return c.call();
                 } catch (Exception e) {
@@ -67,7 +69,7 @@ public class OsgiLocator {
 	public static synchronized List<Class> locateAll(String factoryId) {
 		List<Class> classes = new ArrayList<Class>();
         if (factories != null) {
-            List<Callable<Class>> l = factories.get(factoryId);
+            Set<Callable<Class>> l = factories.get(factoryId);
             if (l != null) {
                 for (Callable<Class> c : l) {
                 	try {
