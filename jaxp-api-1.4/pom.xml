@@ -55,7 +55,7 @@
                     <instructions>
                         <Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
                         <Export-Package>
-                            javax.xml*;version=1.3;-split-package:=merge-first,
+                            javax.xml*;version=1.4;-split-package:=merge-first,
                             org.w3c.dom*;version=1.0;-split-package:=merge-first,
                             org.xml.sax*;version=2.0.2;-split-package:=merge-first,
                         </Export-Package>
