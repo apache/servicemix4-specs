@@ -26,14 +26,14 @@ import java.util.HashSet;
 
 public class OsgiLocator {
 
-    private static Map<String, Set<Callable<Class>>> factories;
+    private static Map<String, List<Callable<Class>>> factories;
 
     private OsgiLocator() {
     }
 
     public static synchronized void unregister(String id, Callable<Class> factory) {
         if (factories != null) {
-            Set<Callable<Class>> l = factories.get(id);
+            List<Callable<Class>> l = factories.get(id);
             if (l != null) {
                 l.remove(factory);
             }
@@ -42,11 +42,11 @@ public class OsgiLocator {
 
     public static synchronized void register(String id, Callable<Class> factory) {
         if (factories == null) {
-            factories = new HashMap<String, Set<Callable<Class>>>();
+            factories = new HashMap<String, List<Callable<Class>>>();
         }
-        Set<Callable<Class>> l = factories.get(id);
+        List<Callable<Class>> l = factories.get(id);
         if (l ==  null) {
-            l = new HashSet<Callable<Class>>();
+            l = new ArrayList<Callable<Class>>();
             factories.put(id, l);
         }
         l.add(factory);
@@ -54,9 +54,9 @@ public class OsgiLocator {
 
     public static synchronized Class locate(String factoryId) {
         if (factories != null) {
-            Set<Callable<Class>> l = factories.get(factoryId);
+            List<Callable<Class>> l = factories.get(factoryId);
             if (l != null && !l.isEmpty()) {
-                Callable<Class> c = l.iterator().next();
+                Callable<Class> c = l.get(l.size() - 1);
                 try {
                     return c.call();
                 } catch (Exception e) {
@@ -66,10 +66,10 @@ public class OsgiLocator {
         return null;
     }
 
-	public static synchronized List<Class> locateAll(String factoryId) {
-		List<Class> classes = new ArrayList<Class>();
+    public static synchronized List<Class> locateAll(String factoryId) {
+        List<Class> classes = new ArrayList<Class>();
         if (factories != null) {
-            Set<Callable<Class>> l = factories.get(factoryId);
+            List<Callable<Class>> l = factories.get(factoryId);
             if (l != null) {
                 for (Callable<Class> c : l) {
                 	try {
@@ -80,6 +80,6 @@ public class OsgiLocator {
             }
         }
         return classes;
-	}
+    }
 
 }
