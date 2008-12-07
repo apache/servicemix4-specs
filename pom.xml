@@ -46,6 +46,7 @@
         <module>jaxws-api-2.1</module>
         <module>jbi-api-1.0</module>
         <module>scripting-api-1.0</module>
+        <module>jsr311-api-0.8</module>
     </modules>
 
     <scm>
