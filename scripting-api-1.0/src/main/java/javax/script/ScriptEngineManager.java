@@ -17,6 +17,7 @@
 package javax.script;
 
 import java.io.*;
+import java.lang.annotation.AnnotationFormatError;
 import java.net.URL;
 import java.util.*;
 
@@ -61,6 +62,8 @@ public class ScriptEngineManager {
                     } catch(ClassNotFoundException doNothing) { 
 					} catch(IllegalAccessException doNothing) { 
 					} catch(InstantiationException doNothing) { 
+					} catch(LinkageError doNothing) { 
+					} catch(AnnotationFormatError doNothing) { 
 					}
                 }
             }
@@ -113,7 +116,7 @@ public class ScriptEngineManager {
             return null;
         } else {
             ScriptEngine engine = factory.getScriptEngine();
-            engine.setBindings(globalScope, 200);
+            engine.setBindings(globalScope, ScriptContext.GLOBAL_SCOPE);
             return engine;
         }
     }
@@ -141,7 +144,7 @@ public class ScriptEngineManager {
             return null;
         } else {
             ScriptEngine engine = factory.getScriptEngine();
-            engine.setBindings(globalScope, 200);
+            engine.setBindings(globalScope, ScriptContext.GLOBAL_SCOPE);
             return engine;
         }
     }
@@ -169,7 +172,7 @@ public class ScriptEngineManager {
             return null;
         } else {
             ScriptEngine engine = factory.getScriptEngine();
-            engine.setBindings(globalScope, 200);
+            engine.setBindings(globalScope, ScriptContext.GLOBAL_SCOPE);
             return engine;
         }
     }
