@@ -30,7 +30,7 @@
     <groupId>org.apache.servicemix.specs</groupId>
     <artifactId>org.apache.servicemix.specs.javamail-api-1.4</artifactId>
     <packaging>bundle</packaging>
-    <version>1.2_1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
     <name>Apache ServiceMix Specs :: JAVAMAIL API 1.4</name>
 
     <dependencies>
@@ -42,7 +42,7 @@
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-javamail_1.4_spec</artifactId>
-            <version>1.2</version>
+            <version>1.5</version>
         </dependency>
     </dependencies>
 
