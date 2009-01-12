@@ -53,7 +53,7 @@
               <artifactId>maven-compiler-plugin</artifactId>
               <inherited>true</inherited>
               <configuration>
-                <compilerArgument>-Xbootclasspath/p:${settings.localRepository}/org/apache/servicemix/specs/org.apache.servicemix.specs.activation-api-1.1/1.2-SNAPSHOT/org.apache.servicemix.specs.activation-api-1.1-1.2-SNAPSHOT.jar</compilerArgument>
+                <compilerArgument>-Xbootclasspath/p:${settings.localRepository}/org/apache/geronimo/specs/geronimo-activation_1.1_spec/1.0.2/geronimo-activation_1.1_spec-1.0.2.jar</compilerArgument>
               </configuration>
             </plugin>
             <plugin>
