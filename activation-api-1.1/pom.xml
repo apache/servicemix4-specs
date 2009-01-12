@@ -49,6 +49,14 @@
     <build>
         <plugins>
             <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-compiler-plugin</artifactId>
+              <inherited>true</inherited>
+              <configuration>
+                <compilerArgument>-Xbootclasspath/p:${settings.localRepository}/org/apache/servicemix/specs/org.apache.servicemix.specs.activation-api-1.1/1.2-SNAPSHOT/org.apache.servicemix.specs.activation-api-1.1-1.2-SNAPSHOT.jar</compilerArgument>
+              </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
