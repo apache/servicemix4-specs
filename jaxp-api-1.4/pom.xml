@@ -91,6 +91,7 @@
                             <artifactSet>
                                 <includes>
                                     <include>org.apache.servicemix.specs:org.apache.servicemix.specs.locator</include>
+                                    <include>xml-apis:xml-apis</include>
                                 </includes>
                             </artifactSet>
                             <filters>
@@ -98,6 +99,13 @@
                                     <artifact>${project.groupId}:${project.artifactId}</artifact>
                                     <excludes>
                                         <exclude>org/apache/servicemix/**</exclude>
+                                    </excludes>
+                                </filter>
+                                <filter>
+                                    <artifact>xml-apis:xml-apis</artifact>
+                                    <excludes>
+                                        <exclude>javax/**</exclude>
+                                        <exclude>org/**</exclude>
                                     </excludes>
                                 </filter>
                             </filters>
