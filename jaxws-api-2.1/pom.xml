@@ -108,13 +108,13 @@
                         <configuration>
                             <artifactSet>
                                 <includes>
-                                    <include>org.apache.axis2:axis2-jaxws-api</include>
+                                    <include>org.apache.geronimo.specs:geronimo-jaxws_2.1_spec</include>
                                     <include>org.apache.servicemix.specs:org.apache.servicemix.specs.locator</include>
                                 </includes>
                             </artifactSet>
                             <filters>
                                 <filter>
-                                    <artifact>org.apache.axis2:axis2-jaxws-api</artifact>
+                                    <artifact>org.apache.geronimo.specs:geronimo-jaxws_2.1_spec</artifact>
                                     <excludes>
                                         <exclude>javax/**</exclude>
                                     </excludes>
