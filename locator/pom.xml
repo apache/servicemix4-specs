@@ -24,20 +24,20 @@
     <parent>
         <groupId>org.apache.servicemix.specs</groupId>
         <artifactId>specs</artifactId>
-        <version>1.2.0</version>
+        <version>1.2-SNAPSHOT</version>
     </parent>
 
     <groupId>org.apache.servicemix.specs</groupId>
     <artifactId>org.apache.servicemix.specs.locator</artifactId>
     <packaging>jar</packaging>
-    <version>1.2.0</version>
+    <version>1.2-SNAPSHOT</version>
     <name>Apache ServiceMix Specs :: Locator</name>
 
     <dependencies>
         <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.osgi.core</artifactId>
-            <version>1.2.0</version>
+            <version>1.2-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
