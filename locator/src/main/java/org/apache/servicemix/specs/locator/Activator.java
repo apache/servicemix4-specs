@@ -52,7 +52,7 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
      *
      * @param msg <code>String</code> to print to <code>stderr</code>.
      */
-    private void debugPrintln(String msg) {
+    protected void debugPrintln(String msg) {
         if (debug) {
             System.err.println("Spec(" + bundleContext.getBundle().getBundleId() + "): " + msg);
         }

@@ -37,12 +37,12 @@
         <dependency>
             <groupId>org.apache.servicemix.specs</groupId>
             <artifactId>org.apache.servicemix.specs.locator</artifactId>
-            <version>1.1.1</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-javamail_1.4_spec</artifactId>
-            <version>1.5</version>
+            <version>1.6</version>
         </dependency>
     </dependencies>
 
@@ -54,7 +54,7 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
-                        <Export-Package>javax.mail*;version=1.4;-split-package:=merge-first,org.apache.geronimo.mail.util</Export-Package>
+                        <Export-Package>javax.mail*;version=1.4;-split-package:=merge-first,org.apache.geronimo.mail*;version=1.6;-split-package:=merge-first</Export-Package>
                         <Import-Package>*</Import-Package>
                         <Private-Package>org.apache.servicemix.specs.locator;-split-package:=merge-first</Private-Package>
                         <Bundle-Activator>org.apache.servicemix.specs.locator.Activator</Bundle-Activator>

@@ -260,7 +260,7 @@ public class MailcapCommandMap extends CommandMap {
      * @param commands A List containing the command information.
      * @param fallback The target list identifier.
      */
-    private void addCommands(String mimeType, List commands, boolean fallback) {
+    protected void addCommands(String mimeType, List commands, boolean fallback) {
         // add this to the mimeType set
         mimeTypes.put(mimeType, mimeType);
         // the target list changes based on the type of entry.
@@ -291,7 +291,7 @@ public class MailcapCommandMap extends CommandMap {
      * @param mimeType The MIME type the command is associated with.
      * @param command  The command information.
      */
-    private void addCommand(Map commandList, String mimeType, CommandInfo command) {
+    protected void addCommand(Map commandList, String mimeType, CommandInfo command) {
 
         Map commands = (Map) commandList.get(mimeType);
         if (commands == null) {
@@ -456,22 +456,6 @@ public class MailcapCommandMap extends CommandMap {
     }
 
     public synchronized DataContentHandler createDataContentHandler(String mimeType) {
-    	
-    	//If we are deployed into an OSGi environment, leverage it
-    	String osgiMimeType = mimeType;
-    	if (mimeType.indexOf("/") >= 0) {
-    		osgiMimeType = mimeType.replace('/', '_');
-    	}
-        Class dchClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(osgiMimeType);
-        if (dchClass != null) {
-			try {
-				return (DataContentHandler) dchClass.newInstance();
-			} catch (InstantiationException e) {
-				
-			} catch (IllegalAccessException e) {
-				
-			}
-		}
 
         CommandInfo info = getCommand(mimeType, "content-handler");
         if (info == null) {
