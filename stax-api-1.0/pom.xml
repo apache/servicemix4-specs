@@ -54,7 +54,7 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
-                        <Export-Package>javax.xml.stream*;version=1.0;-split-package:=merge-first</Export-Package>
+                        <Export-Package>javax.xml.stream*;version=1.0.1;-split-package:=merge-first</Export-Package>
                         <Import-Package>*</Import-Package>
                         <Private-Package>org.apache.servicemix.specs.locator;-split-package:=merge-first</Private-Package>
                         <Bundle-Activator>org.apache.servicemix.specs.locator.Activator</Bundle-Activator>
