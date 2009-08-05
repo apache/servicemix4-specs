@@ -32,6 +32,9 @@ class ContextFinder {
 
     public static JAXBContext find(String contextPath, ClassLoader classLoader, Map properties) throws JAXBException {
         String className = null;
+        if (contextPath == null || contextPath.length() == 0) {
+            throw new JAXBException("Invalid contextPath");
+        }
         String[] packages = contextPath.split(":");
         if (packages == null || packages.length == 0) {
             throw new JAXBException("Invalid contextPath");
