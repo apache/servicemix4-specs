@@ -32,12 +32,13 @@ class ContextFinder {
 
     public static JAXBContext find(String contextPath, ClassLoader classLoader, Map properties) throws JAXBException {
         String className = null;
+        // Patch for bug https://issues.apache.org/activemq/browse/SMX4-329
         if (contextPath == null || contextPath.length() == 0) {
-            throw new JAXBException("Invalid contextPath");
-        }
+            throw new JAXBException("Invalid contextPath (empty or null)");
+  	    }
         String[] packages = contextPath.split(":");
         if (packages == null || packages.length == 0) {
-            throw new JAXBException("Invalid contextPath");
+            throw new JAXBException("Invalid contextPath (no packages)");
         }
         for (String pkg : packages) {
             String url = pkg.replace('.', '/') + "/jaxb.properties";
@@ -60,6 +61,13 @@ class ContextFinder {
         try {
             Method m = spi.getMethod("createContext", new Class[] { String.class, ClassLoader.class, Map.class });
             return (JAXBContext) m.invoke(null, new Object[] { contextPath, classLoader, properties });
+        } catch (Throwable t) {
+            // Ignored
+        }
+        // Fallback for JAXB 1.0 compatibility (at least JAXB TCK tests are using that feature)
+        try {
+            Method m = spi.getMethod("createContext", new Class[] { String.class, ClassLoader.class, });
+            return (JAXBContext) m.invoke(null, new Object[] { contextPath, classLoader });
         } catch (Throwable t) {
             throw new JAXBException("Unable to create context", t);
         }
@@ -170,3 +178,4 @@ class ContextFinder {
 
 
 }
+
