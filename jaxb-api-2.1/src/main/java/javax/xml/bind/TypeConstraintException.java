@@ -50,7 +50,8 @@ public class TypeConstraintException extends RuntimeException {
     }
 
     public Throwable getLinkedException() {
-        return getCause();
+        // Do not use getCause() as the cause was never initialized in the constructor
+        return linkedException;
     }
 
     public synchronized void setLinkedException(Throwable linkedException) {
@@ -64,10 +65,14 @@ public class TypeConstraintException extends RuntimeException {
     }
 
     public void printStackTrace() {
-        super.printStackTrace();
+        printStackTrace(System.err);
     }
 
     public void printStackTrace(PrintStream ps) {
+        if (this.linkedException != null) {
+            this.linkedException.printStackTrace(ps);
+            ps.println("--------------- linked to ------------------");
+        }
         super.printStackTrace(ps);
     }
 
