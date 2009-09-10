@@ -75,6 +75,7 @@
                         <Bundle-Activator>org.apache.servicemix.specs.locator.Activator</Bundle-Activator>
                         <Implementation-Title>Apache ServiceMix</Implementation-Title>
                         <Implementation-Version>${project.version}</Implementation-Version>
+                        <DynamicImport-Package>*</DynamicImport-Package>
                     </instructions>
                     <unpackBundle>true</unpackBundle>
                 </configuration>
