@@ -3,7 +3,7 @@
 // Written by David Megginson
 // and by David Brownell
 // NO WARRANTY!  This class is in the Public Domain.
-// $Id: XMLReaderFactory.java 226251 2005-06-21 19:19:22Z mrglavas $
+// $Id: XMLReaderFactory.java 670295 2008-06-22 01:46:43Z mrglavas $
 
 package org.xml.sax.helpers;
 import java.io.BufferedReader;
@@ -111,15 +111,14 @@ final public class XMLReaderFactory
     throws SAXException
     {
         String		className = null;
-        SecuritySupport ss = SecuritySupport.getInstance();
         ClassLoader	loader = NewInstance.getClassLoader ();
         
         // 1. try the JVM-instance-wide system property
-        try { className = ss.getSystemProperty (property); }
+        try { className = SecuritySupport.getSystemProperty (property); }
         catch (Exception e) { /* normally fails for applets */ }
         
         // 2. if that fails, try META-INF/services/
-        if (className == null) {
+        if (className == null || className.length() == 0) {
             String      service = "META-INF/services/" + property;
             
 	        try {
@@ -132,22 +131,23 @@ final public class XMLReaderFactory
 	        }
 
             InputStream is = null;
+            className = null;
             
             // First try the Context ClassLoader
-            ClassLoader cl = ss.getContextClassLoader();
+            ClassLoader cl = SecuritySupport.getContextClassLoader();
             if (cl != null) {
-                is = ss.getResourceAsStream(cl, service);
+                is = SecuritySupport.getResourceAsStream(cl, service);
                 
                 // If no provider found then try the current ClassLoader
                 if (is == null) {
                     cl = XMLReaderFactory.class.getClassLoader();
-                    is = ss.getResourceAsStream(cl, service);
+                    is = SecuritySupport.getResourceAsStream(cl, service);
                 }
             } else {
                 // No Context ClassLoader or JDK 1.1 so try the current
                 // ClassLoader
                 cl = XMLReaderFactory.class.getClassLoader();
-                is = ss.getResourceAsStream(cl, service);
+                is = SecuritySupport.getResourceAsStream(cl, service);
             }
             
             if (is != null) {
