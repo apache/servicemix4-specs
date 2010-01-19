@@ -53,6 +53,7 @@
         <module>javamail-api-1.4</module>
         <module>activation-api-1.1</module>
         <module>java-persistence-api-1.1.1</module>
+        <module>java-persistence-api-2.0</module>
     </modules>
 
     <scm>
