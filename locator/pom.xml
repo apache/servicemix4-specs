@@ -42,23 +42,6 @@
         </dependency>
     </dependencies>
 
-    <properties>
-        <pkgArtifactId>woodstox</pkgArtifactId>
-        <pkgVersion>${woodstox.version}</pkgVersion>
-        <servicemix.osgi.import.pkg>
-            com.sun.msv*;resolution:=optional,
-            org.relaxng*;resolution:=optional,
-            *
-        </servicemix.osgi.import.pkg>
-        <servicemix.osgi.export>
-            com.ctc.wstx*;version=${pkgVersion};-split-package:=merge-first,
-            org.codehaus.stax2*;version=${pkgVersion};-split-package:=merge-first,
-        </servicemix.osgi.export>
-        <servicemix.osgi.private.pkg>
-            META-INF*
-        </servicemix.osgi.private.pkg>
-    </properties>
-
     <profiles>
         <profile>
             <id>deploy</id>
