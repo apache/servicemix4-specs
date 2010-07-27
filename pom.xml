@@ -32,7 +32,7 @@
     <artifactId>specs</artifactId>
     <packaging>pom</packaging>
     <version>1.6-SNAPSHOT</version>
-    <name>Apache ServiceMix Specs</name>
+    <name>Apache ServiceMix :: Specs</name>
     <inceptionYear>2007</inceptionYear>
 
     <modules>

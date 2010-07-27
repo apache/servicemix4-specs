@@ -31,7 +31,7 @@
     <artifactId>org.apache.servicemix.specs.jaxp-api-1.4</artifactId>
     <packaging>bundle</packaging>
     <version>1.6-SNAPSHOT</version>
-    <name>Apache ServiceMix Specs :: JAXP API 1.4</name>
+    <name>Apache ServiceMix :: Specs :: JAXP API 1.4</name>
 
     <dependencies>
         <dependency>

@@ -31,7 +31,7 @@
     <artifactId>org.apache.servicemix.specs.java-persistence-api-1.1.1</artifactId>
     <packaging>bundle</packaging>
     <version>1.6-SNAPSHOT</version>
-    <name>Apache ServiceMix Specs :: JAVA PERSISTENCE API 1.4</name>
+    <name>Apache ServiceMix :: Specs :: JAVA PERSISTENCE API 1.4</name>
 
     <dependencies>
         <dependency>

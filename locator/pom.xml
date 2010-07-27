@@ -31,7 +31,7 @@
     <artifactId>org.apache.servicemix.specs.locator</artifactId>
     <packaging>jar</packaging>
     <version>1.6-SNAPSHOT</version>
-    <name>Apache ServiceMix Specs :: Locator</name>
+    <name>Apache ServiceMix :: Specs :: Locator</name>
 
     <dependencies>
         <dependency>

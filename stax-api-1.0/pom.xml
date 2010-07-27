@@ -31,7 +31,7 @@
     <artifactId>org.apache.servicemix.specs.stax-api-1.0</artifactId>
     <packaging>bundle</packaging>
     <version>1.6-SNAPSHOT</version>
-    <name>Apache ServiceMix Specs :: STAX API 1.0</name>
+    <name>Apache ServiceMix :: Specs :: STAX API 1.0</name>
 
     <dependencies>
         <dependency>

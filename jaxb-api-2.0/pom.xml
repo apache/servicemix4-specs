@@ -31,7 +31,7 @@
     <artifactId>org.apache.servicemix.specs.jaxb-api-2.0</artifactId>
     <packaging>bundle</packaging>
     <version>1.6-SNAPSHOT</version>
-    <name>Apache ServiceMix Specs :: JAXB API 2.0</name>
+    <name>Apache ServiceMix :: Specs :: JAXB API 2.0</name>
 
     <dependencies>
         <dependency>

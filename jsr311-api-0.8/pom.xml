@@ -31,7 +31,7 @@
     <artifactId>org.apache.servicemix.specs.jsr311-api-0.8</artifactId>
     <packaging>bundle</packaging>
     <version>1.6-SNAPSHOT</version>
-    <name>Apache ServiceMix Specs :: JSR311 API 0.8</name>
+    <name>Apache ServiceMix :: Specs :: JSR311 API 0.8</name>
 
     <dependencies>
         <dependency>
