@@ -29,9 +29,6 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.net.URL;
 
-/**
- * @version $Rev: 467742 $ $Date: 2006-10-25 21:30:38 +0200 (Wed, 25 Oct 2006) $
- */
 public class DataHandler implements Transferable {
     private final DataSource ds;
     private final DataFlavor flavor;
