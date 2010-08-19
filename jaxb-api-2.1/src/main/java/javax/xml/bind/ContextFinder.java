@@ -62,7 +62,7 @@ class ContextFinder {
             Method m = spi.getMethod("createContext", new Class[] { String.class, ClassLoader.class, Map.class });
             return (JAXBContext) m.invoke(null, new Object[] { contextPath, classLoader, properties });
         } catch (Throwable t) {
-            // Ignored
+            t.printStackTrace();
         }
         // Fallback for JAXB 1.0 compatibility (at least JAXB TCK tests are using that feature)
         try {
