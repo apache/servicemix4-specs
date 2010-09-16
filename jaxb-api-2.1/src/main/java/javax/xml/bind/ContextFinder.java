@@ -61,9 +61,12 @@ class ContextFinder {
         try {
             Method m = spi.getMethod("createContext", new Class[] { String.class, ClassLoader.class, Map.class });
             return (JAXBContext) m.invoke(null, new Object[] { contextPath, classLoader, properties });
+        } catch (NoSuchMethodException e) {
+            // ignore
         } catch (Throwable t) {
             t.printStackTrace();
-        }
+            throw new JAXBException("Unable to create context", t);
+        } 
         // Fallback for JAXB 1.0 compatibility (at least JAXB TCK tests are using that feature)
         try {
             Method m = spi.getMethod("createContext", new Class[] { String.class, ClassLoader.class, });
