@@ -48,7 +48,7 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Export-Package>javax.jbi*;version=1.0;-split-package:=merge-first</Export-Package>
                         <Import-Package>*</Import-Package>
                         <Implementation-Title>Apache ServiceMix</Implementation-Title>

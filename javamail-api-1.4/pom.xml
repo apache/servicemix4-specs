@@ -53,7 +53,7 @@
                 <artifactId>maven-bundle-plugin</artifactId>
                 <configuration>
                     <instructions>
-                        <Bundle-SymbolicName>${pom.artifactId}</Bundle-SymbolicName>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Export-Package>javax.mail*;version=1.4;-split-package:=merge-first,org.apache.geronimo.mail*;version=1.6;-split-package:=merge-first</Export-Package>
                         <Import-Package>*</Import-Package>
                         <Private-Package>org.apache.servicemix.specs.locator;-split-package:=merge-first</Private-Package>
