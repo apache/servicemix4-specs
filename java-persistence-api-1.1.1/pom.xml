@@ -55,7 +55,7 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Export-Package>javax.persistence*;version=1.1.1;-split-package:=merge-first</Export-Package>
-                        <Import-Package>*</Import-Package>
+                        <Import-Package>!javax.persistence*,*</Import-Package>
                         <Private-Package>org.apache.servicemix.specs.locator;-split-package:=merge-first</Private-Package>
                         <Bundle-Activator>org.apache.servicemix.specs.locator.Activator</Bundle-Activator>
                         <Implementation-Title>Apache ServiceMix</Implementation-Title>

@@ -30,7 +30,7 @@ class ContextFinder {
     private static final String JAXB_CONTEXT_PROPERTY = JAXBContext.class.getName();
     private static final String JAXB_CONTEXT_FACTORY = JAXBContext.JAXB_CONTEXT_FACTORY;
 
-    public static JAXBContext find(String contextPath, ClassLoader classLoader, Map properties) throws JAXBException {
+    public static JAXBContext find(String factoryId, String contextPath, ClassLoader classLoader, Map properties) throws JAXBException {
         String className = null;
         // Patch for bug https://issues.apache.org/activemq/browse/SMX4-329
         if (contextPath == null || contextPath.length() == 0) {
