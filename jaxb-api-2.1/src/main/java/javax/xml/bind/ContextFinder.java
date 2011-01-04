@@ -64,7 +64,6 @@ class ContextFinder {
         } catch (NoSuchMethodException e) {
             // ignore
         } catch (Throwable t) {
-            t.printStackTrace();
             throw new JAXBException("Unable to create context", t);
         } 
         // Fallback for JAXB 1.0 compatibility (at least JAXB TCK tests are using that feature)
