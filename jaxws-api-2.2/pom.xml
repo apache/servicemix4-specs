@@ -59,7 +59,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.servicemix.specs</groupId>
-            <artifactId>org.apache.servicemix.specs.jaxb-api-2.1</artifactId>
+            <artifactId>org.apache.servicemix.specs.jaxb-api-2.2</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
