@@ -24,13 +24,13 @@
     <parent>
         <groupId>org.apache.servicemix.specs</groupId>
         <artifactId>specs</artifactId>
-        <version>1.7.0</version>
+        <version>1.8-SNAPSHOT</version>
     </parent>
 
     <groupId>org.apache.servicemix.specs</groupId>
     <artifactId>org.apache.servicemix.specs.jain-sip-api-1.2</artifactId>
     <packaging>bundle</packaging>
-    <version>1.7.0</version>
+    <version>1.8-SNAPSHOT</version>
     <name>Apache ServiceMix :: Specs :: SIP API 1.2</name>
 
     <repositories>
