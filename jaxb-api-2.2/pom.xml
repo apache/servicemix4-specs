@@ -64,6 +64,7 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Bundle-Description>${project.description}</Bundle-Description>
                         <Export-Package>javax.xml.bind*;version=2.2.1;-split-package:=merge-first</Export-Package>
                         <Import-Package>!javax.xml.bind*,*</Import-Package>
                         <Private-Package>org.apache.servicemix.specs.locator;-split-package:=merge-first</Private-Package>

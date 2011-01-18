@@ -49,6 +49,7 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Bundle-Description>${project.description}</Bundle-Description>
                         <Export-Package>javax.jbi*;version=1.0;-split-package:=merge-first</Export-Package>
                         <Import-Package>*</Import-Package>
                         <Implementation-Title>Apache ServiceMix</Implementation-Title>

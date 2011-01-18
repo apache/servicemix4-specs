@@ -68,6 +68,7 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Bundle-Description>${project.description}</Bundle-Description>
                         <Export-Package>javax.activation*;version=1.1;-split-package:=merge-first</Export-Package>
                         <Import-Package>
                             *,

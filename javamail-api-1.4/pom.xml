@@ -54,6 +54,7 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Bundle-Description>${project.description}</Bundle-Description>
                         <Export-Package>javax.mail*;version=1.4;-split-package:=merge-first,org.apache.geronimo.mail*;version=1.6;-split-package:=merge-first</Export-Package>
                         <Import-Package>*</Import-Package>
                         <Private-Package>org.apache.servicemix.specs.locator;-split-package:=merge-first</Private-Package>
