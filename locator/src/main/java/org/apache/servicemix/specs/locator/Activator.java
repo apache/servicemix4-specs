@@ -132,6 +132,7 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
         private final String factoryId;
         private final URL u;
         private final Bundle bundle;
+        private volatile Class<?> clazz;
 
         public BundleFactoryLoader(String factoryId, URL u, Bundle bundle) {
             this.factoryId = factoryId;
@@ -141,12 +142,21 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
 
         public Class call() throws Exception {
             try {
-                debugPrintln("creating factory for key: " + factoryId);
-                BufferedReader br = new BufferedReader(new InputStreamReader(u.openStream(), "UTF-8"));
-                String factoryClassName = br.readLine();
-                br.close();
-                debugPrintln("factory implementation: " + factoryClassName);
-                return bundle.loadClass(factoryClassName);
+                debugPrintln("loading factory for key: " + factoryId);
+                
+                if (clazz == null){
+                    synchronized (this) {
+                        if (clazz == null){
+                            debugPrintln("creating factory for key: " + factoryId);
+                            BufferedReader br = new BufferedReader(new InputStreamReader(u.openStream(), "UTF-8"));
+                            String factoryClassName = br.readLine();
+                            br.close();
+                            debugPrintln("factory implementation: " + factoryClassName);
+                            clazz = bundle.loadClass(factoryClassName);
+                        }
+                    }
+                }
+                return clazz;
             } catch (Exception e) {
                 debugPrintln("exception caught while creating factory: " + e);
                 throw e;
