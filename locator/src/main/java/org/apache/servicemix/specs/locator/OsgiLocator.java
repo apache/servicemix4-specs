@@ -70,11 +70,28 @@ public class OsgiLocator {
             if (factories != null) {
                 List<Callable<Class>> l = factories.get(factoryId);
                 if (l != null && !l.isEmpty()) {
-                    Callable<Class> c = l.get(l.size() - 1);
+                    // look up the System property first
+                    String factoryClassName = System.getProperty(factoryId);
                     try {
-                        return c.call();
-                    } catch (Exception e) {
-                    }
+                        if (factoryClassName != null) {
+                            for (Callable<Class> i : l) {
+                                Class c = null;
+                                try {
+                                    c = i.call();
+                                } catch (Exception ex) {
+                                    // do nothing here
+                                }
+                                if (c != null && c.getName().equals(factoryClassName)) {
+                                    return c;
+                                }
+                            }
+                        } else {
+                            Callable<Class> callable = l.get(l.size() - 1);
+                            return callable.call();
+                        }
+                    } catch (Exception ex) {
+                        // do nothing here
+                    }  
                 }
             }
             return null;
