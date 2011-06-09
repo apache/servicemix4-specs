@@ -59,6 +59,9 @@ public class OsgiLocator {
                 factories.put(id, l);
             }
             l.add(0, factory);
+            synchronized (lock) {
+                lock.notifyAll();
+            }
         } finally {
             lock.writeLock().unlock();
         }
@@ -70,6 +73,30 @@ public class OsgiLocator {
     }
 
     public static <T> Class<? extends T> locate(Class<T> factoryClass, String factoryId) {
+        long timeout = 5000;
+        long t0 = -1;
+        long t1 = t0;
+        while (t1 - t0 < timeout) {
+            Class<? extends T> impl = doLocate(factoryClass, factoryId);
+            if (impl != null) {
+                return impl;
+            }
+            if (t0 == -1) {
+                t0 = t1 = System.currentTimeMillis();
+            }
+            synchronized (lock) {
+                try {
+                    lock.wait(timeout - (t1 - t0));
+                } catch (InterruptedException e) {
+                    return null;
+                }
+            }
+            t1 = System.currentTimeMillis();
+        }
+        return null;
+    }
+
+    private static <T> Class<? extends T> doLocate(Class<T> factoryClass, String factoryId) {
         lock.readLock().lock();
         try {
             if (factories != null) {
