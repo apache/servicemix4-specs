@@ -56,7 +56,8 @@ class FactoryLocator {
                          ClassLoader classLoader) throws FactoryConfigurationError {
         try {
             // If we are deployed into an OSGi environment, leverage it
-            Class spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(factoryId);
+            Class factoryClass = FactoryLocator.class.getClassLoader().loadClass(factoryId);
+            Class spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(factoryClass, factoryId);
             if (spiClass != null) {
                 return spiClass.newInstance();
             }

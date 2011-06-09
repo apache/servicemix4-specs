@@ -314,9 +314,9 @@ public class Validation {
 				providers = new ArrayList<ValidationProvider<?>>();
 				try {
 					// If we are deployed into an OSGi environment, leverage it
-					Class providerClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(ValidationProvider.class.getName());
+					Class<? extends ValidationProvider> providerClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(ValidationProvider.class);
 					if (providerClass != null) {
-						providers.add(( ValidationProvider ) providerClass.newInstance());
+						providers.add(providerClass.newInstance());
 					}
 				} catch (Throwable e) {
 					// Do nothing here

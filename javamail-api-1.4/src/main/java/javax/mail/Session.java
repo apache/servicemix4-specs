@@ -211,7 +211,7 @@ public final class Session {
      */
     public Provider getProvider(String protocol) throws NoSuchProviderException {
     	//If we are deployed into an OSGi environment, leverage it
-        Class providerClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(protocol);
+        Class<? extends Provider> providerClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(Provider.class, protocol);
         if (providerClass != null) {
             try {
 				return (Provider) providerClass.newInstance();
@@ -492,11 +492,11 @@ public final class Session {
             }
             
             //If we are deployed into an OSGi environment, leverage it
-            Class providerClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(provider.getClassName());
+            Class<? extends Service> providerClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(Service.class, provider.getClassName());
             if (providerClass != null) {
                 try {
                 	Constructor ctr = providerClass.getConstructor(PARAM_TYPES);
-                    return (Service) ctr.newInstance(new Object[]{this, name});
+                    return (Service) ctr.newInstance(this, name);
     			} catch (InstantiationException e) {
     				throw new NoSuchProviderException(e.getMessage());
     			} catch (IllegalAccessException e) {
@@ -507,7 +507,7 @@ public final class Session {
             ClassLoader cl = getClassLoader();
             Class clazz = cl.loadClass(provider.getClassName());
             Constructor ctr = clazz.getConstructor(PARAM_TYPES);
-            return (Service) ctr.newInstance(new Object[]{this, name});
+            return (Service) ctr.newInstance(this, name);
         } catch (ClassNotFoundException e) {
             throw (NoSuchProviderException) new NoSuchProviderException("Unable to load class for provider: " + provider).initCause(e);
         } catch (NoSuchMethodException e) {

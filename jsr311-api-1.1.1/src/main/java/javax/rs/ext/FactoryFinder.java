@@ -68,7 +68,8 @@ public class FactoryFinder {
     static Object find(String factoryId, String fallbackClassName) throws ClassNotFoundException {
         try {
             // If we are deployed into an OSGi environment, leverage it
-            Class spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(factoryId);
+            Class factoryClass = FactoryFinder.class.getClassLoader().loadClass(factoryId);
+            Class spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(factoryClass, factoryId);
             if (spiClass != null) {
                 return spiClass.newInstance();
             }

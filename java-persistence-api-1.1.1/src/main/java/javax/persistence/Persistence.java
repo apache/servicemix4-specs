@@ -97,11 +97,10 @@ public class Persistence {
         }
          
         //If we are deployed into an OSGi environment, leverage it
-        Class providerClass = org.apache.servicemix.specs.locator.OsgiLocator.locate("javax.persistence.spi.PersistenceProvider");
+        Class<? extends PersistenceProvider> providerClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(PersistenceProvider.class);
         if (providerClass != null) {
             try {
-                PersistenceProvider provider = (PersistenceProvider) providerClass
-                    .newInstance();
+                PersistenceProvider provider = providerClass.newInstance();
                 return provider.createEntityManagerFactory(persistenceUnitName,
                     properties);
             }

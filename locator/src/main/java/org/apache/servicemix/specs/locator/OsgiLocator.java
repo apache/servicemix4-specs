@@ -16,13 +16,13 @@
  */
 package org.apache.servicemix.specs.locator;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
 
 public class OsgiLocator {
 
@@ -58,13 +58,18 @@ public class OsgiLocator {
                 l = new ArrayList<Callable<Class>>();
                 factories.put(id, l);
             }
-            l.add(factory);
+            l.add(0, factory);
         } finally {
             lock.writeLock().unlock();
         }
     }
 
-    public static Class locate(String factoryId) {
+
+    public static <T> Class<? extends T> locate(Class<T> factoryId) {
+        return locate(factoryId, factoryId.getName());
+    }
+
+    public static <T> Class<? extends T> locate(Class<T> factoryClass, String factoryId) {
         lock.readLock().lock();
         try {
             if (factories != null) {
@@ -73,21 +78,18 @@ public class OsgiLocator {
                     // look up the System property first
                     String factoryClassName = System.getProperty(factoryId);
                     try {
-                        if (factoryClassName != null) {
-                            for (Callable<Class> i : l) {
-                                Class c = null;
-                                try {
-                                    c = i.call();
-                                } catch (Exception ex) {
-                                    // do nothing here
-                                }
-                                if (c != null && c.getName().equals(factoryClassName)) {
-                                    return c;
-                                }
+                        for (Callable<Class> i : l) {
+                            Class c = null;
+                            try {
+                                c = i.call();
+                            } catch (Exception ex) {
+                                // do nothing here
                             }
-                        } else {
-                            Callable<Class> callable = l.get(l.size() - 1);
-                            return callable.call();
+                            if (c != null && factoryClass == c.getClassLoader().loadClass(factoryClass.getName())
+                                     && (factoryClassName == null || c.getName().equals(factoryClassName)))
+                            {
+                                return c;
+                            }
                         }
                     } catch (Exception ex) {
                         // do nothing here
@@ -100,16 +102,23 @@ public class OsgiLocator {
         }
     }
 
-    public static List<Class> locateAll(String factoryId) {
+    public static <T> List<Class<? extends T>> locateAll(Class<T> factoryId) {
+        return locateAll(factoryId, factoryId.getName());
+    }
+
+    public static <T> List<Class<? extends T>> locateAll(Class<T> factoryClass, String factoryId) {
         lock.readLock().lock();
         try {
-            List<Class> classes = new ArrayList<Class>();
+            List<Class<? extends T>> classes = new ArrayList<Class<? extends T>>();
             if (factories != null) {
                 List<Callable<Class>> l = factories.get(factoryId);
                 if (l != null) {
-                    for (Callable<Class> c : l) {
+                    for (Callable<Class> i : l) {
                     	try {
-                        	classes.add(c.call());
+                            Class c = i.call();
+                            if (c != null && factoryClass.isAssignableFrom(c)) {
+                        	    classes.add(c);
+                            }
                     	} catch (Exception e) {
                     	}
     				}

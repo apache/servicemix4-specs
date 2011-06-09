@@ -83,7 +83,8 @@ class FactoryFinder {
                        String defaultFactoryClassName) throws SOAPException {
         try {
             // If we are deployed into an OSGi environment, leverage it
-            Class spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(factoryPropertyName);
+            Class factoryClass = FactoryFinder.class.getClassLoader().loadClass(factoryPropertyName);
+            Class spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(factoryClass, factoryPropertyName);
             if (spiClass != null) {
                 return spiClass.newInstance();
             }

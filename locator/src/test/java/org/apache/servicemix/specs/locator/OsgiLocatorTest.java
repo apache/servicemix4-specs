@@ -31,19 +31,19 @@ public class OsgiLocatorTest extends Assert {
     @Test
     public void testLocatorWithSystemProperty() {
         System.setProperty("Factory", "org.apache.servicemix.specs.locator.MockCallable");
-        Class clazz = OsgiLocator.locate("Factory");
+        Class clazz = OsgiLocator.locate(Object.class, "Factory");
         assertNotNull("Except to find the class", clazz);
         assertEquals("Get a wrong class.", MockCallable.class.getName(), clazz.getName());
         
         System.setProperty("Factory", "org.apache.servicemix.specs.locator");
-        clazz = OsgiLocator.locate("Factory");
+        clazz = OsgiLocator.locate(Object.class, "Factory");
         assertNull("Except to find the class", clazz);
         System.clearProperty("Factory");
     }
     
     @Test
     public void testLocatorWithoutSystemProperty() {
-        Class clazz = OsgiLocator.locate("Factory");
+        Class clazz = OsgiLocator.locate(Object.class, "Factory");
         assertNotNull("Except to find the class", clazz);
         assertEquals("Get a wrong class.", MockCallable2.class.getName(), clazz.getName());
     }

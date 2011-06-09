@@ -95,10 +95,10 @@ public class ScriptEngineManager {
 
     public ScriptEngine getEngineByName(String shortName) {
 		ScriptEngineFactory factory = null;
-        List<Class> factoryClasses = org.apache.servicemix.specs.locator.OsgiLocator.locateAll("javax.script.ScriptEngineFactory");
-        for (Class factoryClass : factoryClasses) {
+        List<Class<? extends ScriptEngineFactory>> factoryClasses = org.apache.servicemix.specs.locator.OsgiLocator.locateAll(javax.script.ScriptEngineFactory.class);
+        for (Class<? extends ScriptEngineFactory> factoryClass : factoryClasses) {
 			try {
-				ScriptEngineFactory f = (ScriptEngineFactory) factoryClass.newInstance();
+				ScriptEngineFactory f = factoryClass.newInstance();
 				if (f.getNames().contains(shortName)) {
 					factory = f;
 					break;
@@ -123,10 +123,10 @@ public class ScriptEngineManager {
 
     public ScriptEngine getEngineByExtension(String extension) {
 		ScriptEngineFactory factory = null;
-        List<Class> factoryClasses = org.apache.servicemix.specs.locator.OsgiLocator.locateAll("javax.script.ScriptEngineFactory");
-        for (Class factoryClass : factoryClasses) {
+        List<Class<? extends ScriptEngineFactory>> factoryClasses = org.apache.servicemix.specs.locator.OsgiLocator.locateAll(javax.script.ScriptEngineFactory.class);
+        for (Class<? extends ScriptEngineFactory> factoryClass : factoryClasses) {
 			try {
-				ScriptEngineFactory f = (ScriptEngineFactory) factoryClass.newInstance();
+				ScriptEngineFactory f = factoryClass.newInstance();
 				if (f.getExtensions().contains(extension)) {
 					factory = f;
 					break;
@@ -151,10 +151,10 @@ public class ScriptEngineManager {
 
     public ScriptEngine getEngineByMimeType(String mimeType) {
 		ScriptEngineFactory factory = null;
-        List<Class> factoryClasses = org.apache.servicemix.specs.locator.OsgiLocator.locateAll("javax.script.ScriptEngineFactory");
-        for (Class factoryClass : factoryClasses) {
+        List<Class<? extends ScriptEngineFactory>> factoryClasses = org.apache.servicemix.specs.locator.OsgiLocator.locateAll(javax.script.ScriptEngineFactory.class);
+        for (Class<? extends ScriptEngineFactory> factoryClass : factoryClasses) {
 			try {
-				ScriptEngineFactory f = (ScriptEngineFactory) factoryClass.newInstance();
+				ScriptEngineFactory f = factoryClass.newInstance();
 				if (f.getMimeTypes().contains(mimeType)) {
 					factory = f;
 					break;
@@ -179,8 +179,8 @@ public class ScriptEngineManager {
 
     public List<ScriptEngineFactory> getEngineFactories() {
         List<ScriptEngineFactory> factories = new ArrayList();
-        List<Class> factoryClasses = org.apache.servicemix.specs.locator.OsgiLocator.locateAll("javax.script.ScriptEngineFactory");
-        for (Class factoryClass : factoryClasses) {
+        List<Class<? extends ScriptEngineFactory>> factoryClasses = org.apache.servicemix.specs.locator.OsgiLocator.locateAll(javax.script.ScriptEngineFactory.class);
+        for (Class<? extends ScriptEngineFactory> factoryClass : factoryClasses) {
 			try {
 				factories.add((ScriptEngineFactory) factoryClass.newInstance());
 			} catch (Throwable doNothing) {

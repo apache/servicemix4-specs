@@ -161,7 +161,7 @@ final class XPathFactoryFinder {
         
         try {
             // If we are deployed into an OSGi environment, leverage it
-            Class spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(SERVICE_CLASS.getName());
+            Class spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(SERVICE_CLASS);
             if (spiClass != null) {
                 return (XPathFactory) spiClass.newInstance();
             }

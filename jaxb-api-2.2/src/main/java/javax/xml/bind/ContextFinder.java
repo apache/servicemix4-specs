@@ -477,7 +477,7 @@ class ContextFinder {
     private static Class safeLoadClass(String className, ClassLoader classLoader) throws ClassNotFoundException {
        // using Osig locator to load the spi class 
        try {
-           Class spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(JAXBContext.class.getName());
+           Class spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(JAXBContext.class);
            if (spiClass != null) {
                return spiClass;
            }

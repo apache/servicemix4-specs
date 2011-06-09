@@ -123,9 +123,9 @@ final public class XMLReaderFactory
             
 	        try {
 	            // If we are deployed into an OSGi environment, leverage it
-	            Class spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(property);
+	            Class<? extends XMLReader> spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(XMLReader.class, property);
 	            if (spiClass != null) {
-	                return (XMLReader) spiClass.newInstance();
+	                return spiClass.newInstance();
 	            }
 	        } catch (Throwable e) {
 	        }
