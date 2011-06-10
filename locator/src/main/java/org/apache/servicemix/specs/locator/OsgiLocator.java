@@ -26,6 +26,16 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class OsgiLocator {
 
+    private static long timeout = 5000l;
+    static {
+        try {
+            String prop = System.getProperty("org.apache.servicemix.specs.timeout");
+            if (prop != null) {
+                timeout = Long.parseLong(prop);
+            }
+        } catch (Throwable t) { }
+    }
+
     private static Map<String, List<Callable<Class>>> factories;
     
     private static ReadWriteLock lock = new ReentrantReadWriteLock();
@@ -73,7 +83,6 @@ public class OsgiLocator {
     }
 
     public static <T> Class<? extends T> locate(Class<T> factoryClass, String factoryId) {
-        long timeout = 5000;
         long t0 = -1;
         long t1 = t0;
         while (t1 - t0 < timeout) {
