@@ -103,10 +103,11 @@ class ContextFinder {
     private static JAXBException handleClassCastException(Class originalType, Class targetType) {
         final URL targetTypeURL = which(targetType);
 
+        ClassLoader cl = originalType.getClassLoader() != null ? originalType.getClassLoader() : ClassLoader.getSystemClassLoader();
         return new JAXBException(Messages.format(Messages.ILLEGAL_CAST,
                 // we don't care where the impl class is, we want to know where JAXBContext lives in the impl
                 // class' ClassLoader
-                originalType.getClassLoader().getResource("javax/xml/bind/JAXBContext.class"),
+                cl.getResource("javax/xml/bind/JAXBContext.class"),
                 targetTypeURL));
     }
 
@@ -134,6 +135,10 @@ class ContextFinder {
             // this is added in 2.0.
             try {
                 Method m = spiClass.getMethod("createContext",String.class,ClassLoader.class,Map.class);
+                // Throw an early exception instead of having an exception thrown in the createContext method
+                if (m.getReturnType() != JAXBContext.class) {
+                    throw handleClassCastException(m.getReturnType(), JAXBContext.class);
+                }
                 // any failure in invoking this method would be considered fatal
                 context = m.invoke(null,contextPath,classLoader,properties);
             } catch (NoSuchMethodException e) {
@@ -144,6 +149,10 @@ class ContextFinder {
                 // try the old method that doesn't take properties. compatible with 1.0.
                 // it is an error for an implementation not to have both forms of the createContext method.
                 Method m = spiClass.getMethod("createContext",String.class,ClassLoader.class);
+                // Throw an early exception instead of having an exception thrown in the createContext method
+                if (m.getReturnType() != JAXBContext.class) {
+                    throw handleClassCastException(m.getReturnType(), JAXBContext.class);
+                }
                 // any failure in invoking this method would be considered fatal
                 context = m.invoke(null,contextPath,classLoader);
             }
