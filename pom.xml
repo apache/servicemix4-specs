@@ -78,6 +78,10 @@
         <maven>2.0.7</maven>
     </prerequisites>
 
+    <properties>
+        <osgi.version>4.2.0</osgi.version>
+    </properties>
+
     <repositories>
         <!-- Default repository -->
         <repository>
@@ -107,6 +111,16 @@
             <url>http://japidiff.googlecode.com/svn/m2-repo</url>
         </pluginRepository>
     </pluginRepositories>
+
+    <dependencies>
+        <!-- adding the OSGi JAR everywhere to ensure javadoc can get built -->
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.core</artifactId>
+            <version>${osgi.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
     <dependencyManagement>
         <dependencies>

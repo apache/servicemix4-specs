@@ -34,12 +34,6 @@
     <name>Apache ServiceMix :: Specs :: Locator</name>
 
     <dependencies>
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.osgi.core</artifactId>
-            <version>1.2.0</version>
-            <scope>provided</scope>
-        </dependency>
          <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
