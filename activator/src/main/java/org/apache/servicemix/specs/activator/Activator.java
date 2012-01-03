@@ -14,7 +14,7 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.servicemix.specs.locator;
+package org.apache.servicemix.specs.activator;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -26,6 +26,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.servicemix.specs.locator.OsgiLocator;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
