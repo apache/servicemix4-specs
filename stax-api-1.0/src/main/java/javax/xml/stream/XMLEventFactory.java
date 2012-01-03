@@ -43,12 +43,15 @@ public abstract class XMLEventFactory {
 
 	public static XMLEventFactory newInstance()
 			throws FactoryConfigurationError {
-            return (XMLEventFactory)FactoryLocator.locate("javax.xml.stream.XMLEventFactory", "com.sun.xml.internal.stream.events.XMLEventFactoryImpl");
+            return (XMLEventFactory)FactoryLocator.locate("javax.xml.stream.XMLEventFactory",
+                    new String[] { "com.sun.xml.internal.stream.events.XMLEventFactoryImpl", "com.ibm.xml.xlxp.api.stax.XMLEventFactoryImpl" });
 	}
 
 	public static XMLEventFactory newInstance(String factoryId,
 			ClassLoader classLoader) throws FactoryConfigurationError {
-            return (XMLEventFactory)FactoryLocator.locate(factoryId, "com.sun.xml.internal.stream.events.XMLEventFactoryImpl", classLoader);
+            return (XMLEventFactory)FactoryLocator.locate(factoryId,
+                    new String[] { "com.sun.xml.internal.stream.events.XMLEventFactoryImpl", "com.ibm.xml.xlxp.api.stax.XMLEventFactoryImpl" },
+                    classLoader);
 	}
 
 	public abstract void setLocation(Location location);

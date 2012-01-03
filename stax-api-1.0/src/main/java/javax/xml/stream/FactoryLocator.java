@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.File;
 import java.io.FileInputStream;
 
+import java.util.Arrays;
 import java.util.Properties;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -46,13 +47,13 @@ class FactoryLocator {
 		return locate(factoryId, null);
 	}
 
-	static Object locate(String factoryId, String altClassName)
+	static Object locate(String factoryId, String[] altClassName)
 			throws FactoryConfigurationError {
 		return locate(factoryId, altClassName,
                               Thread.currentThread().getContextClassLoader());
 	}
 
-	static Object locate(String factoryId, String altClassName,
+	static Object locate(String factoryId, String[] altClassName,
                          ClassLoader classLoader) throws FactoryConfigurationError {
         try {
             // If we are deployed into an OSGi environment, leverage it
@@ -119,6 +120,22 @@ class FactoryLocator {
 		}
 		return loadFactory(altClassName, classLoader);
 	}
+
+    private static Object loadFactory(String[] classNames, ClassLoader classLoader)
+            throws FactoryConfigurationError {
+        for (String className : classNames) {
+            try {
+                Class factoryClass = classLoader == null ? Class.forName(className)
+                        : classLoader.loadClass(className);
+
+                return factoryClass.newInstance();
+            } catch (Exception x) {
+            }
+        }
+        throw new FactoryConfigurationError("Requested factory "
+                + Arrays.asList(classNames).toString()
+                + " could not be instantiated");
+    }
 
 	private static Object loadFactory(String className, ClassLoader classLoader)
 			throws FactoryConfigurationError {

@@ -26,12 +26,15 @@ public abstract class XMLOutputFactory {
 	
 	public static XMLOutputFactory newInstance()
 			throws FactoryConfigurationError {
-		return (XMLOutputFactory) FactoryLocator.locate("javax.xml.stream.XMLOutputFactory", "com.sun.xml.internal.stream.XMLOutputFactoryImpl");
+		return (XMLOutputFactory) FactoryLocator.locate("javax.xml.stream.XMLOutputFactory",
+                new String[] { "com.sun.xml.internal.stream.XMLOutputFactoryImpl", "com.ibm.xml.xlxp.api.stax.XMLOutputFactoryImpl" });
 	}
 
 	public static XMLInputFactory newInstance(String factoryId,
 			java.lang.ClassLoader classLoader) throws FactoryConfigurationError {
-		return (XMLInputFactory) FactoryLocator.locate(factoryId, "com.sun.xml.internal.stream.XMLOutputFactoryImpl", classLoader);
+		return (XMLInputFactory) FactoryLocator.locate(factoryId,
+                new String[] { "com.sun.xml.internal.stream.XMLOutputFactoryImpl", "com.ibm.xml.xlxp.api.stax.XMLOutputFactoryImpl" },
+                classLoader);
 	}
 
 	public abstract XMLStreamWriter createXMLStreamWriter(java.io.Writer stream)

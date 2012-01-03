@@ -38,13 +38,16 @@ public abstract class XMLInputFactory {
 	public static XMLInputFactory newInstance()
 			throws FactoryConfigurationError {
 		// We'll assume the XMLInputFactory from the RI as a backup.
-		return (XMLInputFactory)FactoryLocator.locate("javax.xml.stream.XMLInputFactory", "com.sun.xml.internal.stream.XMLInputFactoryImpl");
+		return (XMLInputFactory)FactoryLocator.locate("javax.xml.stream.XMLInputFactory",
+                new String[] { "com.sun.xml.internal.stream.XMLInputFactoryImpl", "com.ibm.xml.xlxp.api.stax.XMLInputFactoryImpl" });
 	}
 
 	public static XMLInputFactory newInstance(java.lang.String factoryId,
 			java.lang.ClassLoader classLoader) throws FactoryConfigurationError {
 		// We'll assume the XMLInputFactory from the RI as a backup.
-		return (XMLInputFactory)FactoryLocator.locate(factoryId, "com.sun.xml.internal.stream.XMLInputFactoryImpl", classLoader);
+		return (XMLInputFactory)FactoryLocator.locate(factoryId,
+                new String[] { "com.sun.xml.internal.stream.XMLInputFactoryImpl", "com.ibm.xml.xlxp.api.stax.XMLInputFactoryImpl" },
+                classLoader);
 	}
 
 	public abstract XMLStreamReader createXMLStreamReader(java.io.Reader reader)
