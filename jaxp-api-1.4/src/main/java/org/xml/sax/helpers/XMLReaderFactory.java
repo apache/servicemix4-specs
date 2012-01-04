@@ -201,7 +201,7 @@ final public class XMLReaderFactory
             // EXAMPLE:
             // className = "com.example.sax.XmlReader";
             // or a $JAVA_HOME/jre/lib/*properties setting...
-            className = "org.apache.xerces.parsers.SAXParser";
+            className = "com.sun.org.apache.xerces.internal.parsers.SAXParser";
             
             // END DISTRIBUTION-SPECIFIC
         }

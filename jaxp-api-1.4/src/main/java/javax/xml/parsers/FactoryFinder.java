@@ -84,7 +84,7 @@ final class FactoryFinder {
      * @param doFallback true if the current ClassLoader should be tried as
      * a fallback if the class is not found using cl
      */
-    private static Object newInstance(String className, ClassLoader cl,
+    static Object newInstance(String className, ClassLoader cl,
                                       boolean doFallback)
         throws ConfigurationError
     {

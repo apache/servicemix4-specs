@@ -29,6 +29,7 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Properties;
+import javax.xml.XMLConstants;
 
 /**
  * Implementation of {@link SchemaFactory#newInstance(String)}.
@@ -259,11 +260,11 @@ final class SchemaFactoryFinder  {
         }
         
         // platform default
-        if (schemaLanguage.equals("http://www.w3.org/2001/XMLSchema")) {
-            if (debug) debugPrintln("attempting to use the platform default XML Schema validator");
-            return createInstance("org.apache.xerces.jaxp.validation.XMLSchemaFactory");
+        if(schemaLanguage.equals("http://www.w3.org/2001/XMLSchema")) {
+            if (debug) debugPrintln("attempting to use the platform default XML Schema 1.0 validator");
+            return createInstance("com.sun.org.apache.xerces.internal.jaxp.validation.XMLSchemaFactory");
         }
-        
+
         if (debug) debugPrintln("all things were tried, but none was found. bailing out.");
         return null;
     }

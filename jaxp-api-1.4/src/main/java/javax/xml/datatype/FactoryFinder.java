@@ -141,7 +141,7 @@ final class FactoryFinder {
      * 
      * @throws ConfigurationError If class could not be created.
      */
-    private static Object newInstance(
+    static Object newInstance(
     	String className,
         ClassLoader classLoader)
         throws ConfigurationError {

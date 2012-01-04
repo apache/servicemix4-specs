@@ -40,9 +40,14 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.servicemix.specs</groupId>
+            <artifactId>org.apache.servicemix.specs.stax-api-1.2</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
-            <version>1.4.01-r709679</version>
+            <version>1.4.01</version>
         </dependency>
     </dependencies>
 
@@ -53,7 +58,7 @@
               <artifactId>maven-compiler-plugin</artifactId>
               <inherited>true</inherited>
               <configuration>
-                <compilerArgument>-Xbootclasspath/p:${settings.localRepository}/xml-apis/xml-apis/1.4.01-r709679/xml-apis-1.4.01-r709679.jar</compilerArgument>
+                <compilerArgument>-Xbootclasspath/p:${settings.localRepository}/xml-apis/xml-apis/1.4.01/xml-apis-1.4.01.jar</compilerArgument>
               </configuration>
             </plugin>
             <plugin>
@@ -64,7 +69,7 @@
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Description>${project.description}</Bundle-Description>
                         <Export-Package>
-                            javax.xml.stream*;version=1.0.1;-split-package:=merge-first,
+                            javax.xml.stream*;version=1.2;-split-package:=merge-first,
                             javax.xml*;version=1.4;-split-package:=merge-first,
                             org.w3c.dom*;version=1.0;-split-package:=merge-first,
                             org.xml.sax*;version=2.0.2;-split-package:=merge-first,

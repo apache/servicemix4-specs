@@ -35,7 +35,7 @@ import java.security.PrivilegedExceptionAction;
  *
  * Security related methods that only work on J2SE 1.2 and newer.
  */
-final class SecuritySupport  {
+final class SecuritySupport {
     
     private SecuritySupport() {}
     
