@@ -87,8 +87,8 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Description>${project.description}</Bundle-Description>
-                        <Export-Package>javax.xml.ws*;version=2.2;-split-package:=merge-first</Export-Package>
-                        <Import-Package>!javax.xml.ws*,!org.apache.geronimo.osgi*,*</Import-Package>
+                        <Export-Package>javax.xml.ws*;version=2.2;-split-package:=merge-first;-noimport:=true</Export-Package>
+                        <Import-Package>*</Import-Package>
                         <Private-Package>org.apache.servicemix.specs.locator;-split-package:=merge-first</Private-Package>
                         <Bundle-Activator>org.apache.servicemix.specs.locator.Activator</Bundle-Activator>
                         <Implementation-Title>Apache ServiceMix</Implementation-Title>
