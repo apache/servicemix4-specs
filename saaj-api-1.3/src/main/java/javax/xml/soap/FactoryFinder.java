@@ -83,7 +83,14 @@ class FactoryFinder {
                        String defaultFactoryClassName) throws SOAPException {
         try {
             // If we are deployed into an OSGi environment, leverage it
-            Class factoryClass = FactoryFinder.class.getClassLoader().loadClass(factoryPropertyName);
+            String factoryClassName = factoryPropertyName;
+            if (factoryPropertyName.equals("javax.xml.soap.MetaFactory")) {
+                //this is an exception that the factoryPropertyName isn't
+                //the actual factory class name, there is no class
+                //javax.xml.soap.MetaFactory at all
+                factoryClassName = "javax.xml.soap.SAAJMetaFactory";
+            }
+            Class factoryClass = FactoryFinder.class.getClassLoader().loadClass(factoryClassName);
             Class spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(factoryClass, factoryPropertyName);
             if (spiClass != null) {
                 return spiClass.newInstance();
