@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.activation.CommandMap;
+import javax.activation.DataContentHandler;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -54,6 +55,19 @@ public class Activator extends org.apache.servicemix.specs.locator.Activator {
         URL url = bundle.getResource("/META-INF/mailcap");
         if (url != null) {
             debugPrintln("found mailcap at " + url);
+
+            try {
+                final Class<?> clazz = bundle
+                        .loadClass("javax.activation.DataContentHandler");
+                if (!clazz.isAssignableFrom(DataContentHandler.class)) {
+                    debugPrintln("incompatible DataContentHandler class in bundle "
+                            + bundle.getBundleId());
+                    return;
+                }
+            } catch (ClassNotFoundException e) {
+                // ignored
+            }
+
             mailcaps.put(bundle.getBundleId(), new MailCap(bundle, url));
             rebuildCommandMap();
         }
