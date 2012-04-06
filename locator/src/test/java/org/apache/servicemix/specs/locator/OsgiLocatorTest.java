@@ -27,25 +27,57 @@ public class OsgiLocatorTest extends Assert {
         OsgiLocator.register("Factory", new MockCallable());
         OsgiLocator.register("Factory", new MockCallable2());
     }
-    
+
     @Test
     public void testLocatorWithSystemProperty() {
+        System.setProperty(OsgiLocator.TIMEOUT, "0");
         System.setProperty("Factory", "org.apache.servicemix.specs.locator.MockCallable");
         Class clazz = OsgiLocator.locate(Object.class, "Factory");
-        assertNotNull("Except to find the class", clazz);
-        assertEquals("Get a wrong class.", MockCallable.class.getName(), clazz.getName());
-        
+        assertNotNull("Expected to find a class", clazz);
+        assertEquals("Got the wrong class", MockCallable.class.getName(), clazz.getName());
+
         System.setProperty("Factory", "org.apache.servicemix.specs.locator");
         clazz = OsgiLocator.locate(Object.class, "Factory");
-        assertNull("Except to find the class", clazz);
-        System.clearProperty("Factory");
+        assertNull("Did not expect to find a class", clazz);
     }
-    
+
     @Test
     public void testLocatorWithoutSystemProperty() {
+        System.setProperty(OsgiLocator.TIMEOUT, "0");
+        System.clearProperty("Factory");
         Class clazz = OsgiLocator.locate(Object.class, "Factory");
-        assertNotNull("Except to find the class", clazz);
-        assertEquals("Get a wrong class.", MockCallable2.class.getName(), clazz.getName());
+        assertNotNull("Expected to find a class", clazz);
+        assertEquals("Got the wrong class", MockCallable2.class.getName(), clazz.getName());
+    }
+
+    @Test
+    public void testLocatorWithSystemPropertyAndTimeout() {
+        long timeout = 1000;
+        System.setProperty(OsgiLocator.TIMEOUT, Long.toString(timeout));
+        System.setProperty("Factory", "org.apache.servicemix.specs.locator.MockCallable");
+        Class clazz = OsgiLocator.locate(Object.class, "Factory");
+        assertNotNull("Expected to find a class", clazz);
+        assertEquals("Got the wrong class.", MockCallable.class.getName(), clazz.getName());
+
+        System.setProperty("Factory", "org.apache.servicemix.specs.locator");
+        long t0 = System.currentTimeMillis();
+        clazz = OsgiLocator.locate(Object.class, "Factory");
+        long t1 = System.currentTimeMillis();
+        assertNull("Did not expect to find a class", clazz);
+        assertTrue("Timeout issue", (t1 - t0) > timeout / 2);
+    }
+
+    @Test
+    public void testLocatorWithoutSystemPropertyAndTimeout() {
+        long timeout = 1000;
+        System.setProperty(OsgiLocator.TIMEOUT, Long.toString(timeout));
+        System.clearProperty("Factory");
+        long t0 = System.currentTimeMillis();
+        Class clazz = OsgiLocator.locate(Object.class, "Factory");
+        long t1 = System.currentTimeMillis();
+        assertNotNull("Expected to find a class", clazz);
+        assertEquals("Got the wrong class", MockCallable2.class.getName(), clazz.getName());
+        assertTrue("Timeout issue", (t1 - t0) < timeout / 2);
     }
 
 }
