@@ -277,7 +277,7 @@ final class SchemaFactoryFinder  {
      * @return null
      *      if it fails. Error messages will be printed by this method. 
      */
-    private SchemaFactory createInstance( String className ) {
+     SchemaFactory createInstance( String className ) {
         try {
             if (debug) debugPrintln("instanciating "+className);
             Class clazz;
