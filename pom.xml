@@ -36,6 +36,7 @@
     <inceptionYear>2007</inceptionYear>
 
     <modules>
+        <module>src-assembly</module>
         <module>locator</module>
         <module>activator</module>
         <module>saaj-api-1.3</module>
@@ -258,6 +259,32 @@
                                 <addArtifact>true</addArtifact>
                                 <projectName>Apache ServiceMix</projectName>
                             </properties>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.3</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.servicemix.bundles</groupId>
+                        <artifactId>src-assembly</artifactId>
+                        <version>1.0-SNAPSHOT</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>make-src-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptorRefs>
+                                <descriptorRef>src-assembly</descriptorRef>
+                            </descriptorRefs>
                         </configuration>
                     </execution>
                 </executions>
