@@ -70,7 +70,7 @@ class FactoryFinder {
      *                              to be used only if nothing else
      *                              is found; <code>null</code> to indicate that
      *                              there is no fallback class name
-     * @exception WebServiceException if there is an error
+     * @exception ClassNotFoundException if there is an error
      */
     static Object find(String factoryId, String fallbackClassName) throws ClassNotFoundException {
         try {
