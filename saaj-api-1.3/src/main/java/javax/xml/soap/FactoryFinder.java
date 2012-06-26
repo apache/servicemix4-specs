@@ -90,7 +90,11 @@ class FactoryFinder {
                 //javax.xml.soap.MetaFactory at all
                 factoryClassName = "javax.xml.soap.SAAJMetaFactory";
             }
-            Class factoryClass = FactoryFinder.class.getClassLoader().loadClass(factoryClassName);
+            ClassLoader cl = FactoryFinder.class.getClassLoader();
+            if (cl == null) {
+            	cl = Thread.currentThread().getContextClassLoader();
+            }
+            Class factoryClass = cl.loadClass(factoryClassName);
             Class spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(factoryClass, factoryPropertyName);
             if (spiClass != null) {
                 return spiClass.newInstance();
