@@ -79,22 +79,49 @@ class FactoryFinder {
      * @return a factory object
      * @throws SOAPException
      */
+    static Object find(Class factory,
+                       String defaultFactoryClassName) throws SOAPException {
+        return find(factory.getName(), factory, defaultFactoryClassName);
+    }
+    /**
+     * Instantiates a factory object given the factory's property name and the default class name.
+     *
+     * @param factoryPropertyName
+     * @param defaultFactoryClassName
+     * @return a factory object
+     * @throws SOAPException
+     */
     static Object find(String factoryPropertyName,
+                       String defaultFactoryClassName) throws SOAPException {
+        return find(factoryPropertyName, null, defaultFactoryClassName);
+    }
+    /**
+     * Instantiates a factory object given the factory's property name and the default class name.
+     *
+     * @param factoryPropertyName
+     * @param defaultFactoryClassName
+     * @return a factory object
+     * @throws SOAPException
+     */
+    static Object find(String factoryPropertyName,
+                       Class factoryClass,
                        String defaultFactoryClassName) throws SOAPException {
         try {
             // If we are deployed into an OSGi environment, leverage it
-            String factoryClassName = factoryPropertyName;
-            if (factoryPropertyName.equals("javax.xml.soap.MetaFactory")) {
-                //this is an exception that the factoryPropertyName isn't
-                //the actual factory class name, there is no class
-                //javax.xml.soap.MetaFactory at all
-                factoryClassName = "javax.xml.soap.SAAJMetaFactory";
+            if (factoryClass == null) {
+                String factoryClassName = factoryPropertyName;
+                if (factoryPropertyName.equals("javax.xml.soap.MetaFactory")) {
+                    //this is an exception that the factoryPropertyName isn't
+                    //the actual factory class name, there is no class
+                    //javax.xml.soap.MetaFactory at all
+                    factoryClassName = "javax.xml.soap.SAAJMetaFactory";
+                }
+                ClassLoader cl = FactoryFinder.class.getClassLoader();
+                if (cl == null) {
+                    cl = Thread.currentThread().getContextClassLoader();
+                }
+                factoryClass = cl.loadClass(factoryClassName);
             }
-            ClassLoader cl = FactoryFinder.class.getClassLoader();
-            if (cl == null) {
-            	cl = Thread.currentThread().getContextClassLoader();
-            }
-            Class factoryClass = cl.loadClass(factoryClassName);
             Class spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(factoryClass, factoryPropertyName);
             if (spiClass != null) {
                 return spiClass.newInstance();
