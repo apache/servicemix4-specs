@@ -24,13 +24,13 @@
     <parent>
         <groupId>org.apache.servicemix.specs</groupId>
         <artifactId>specs</artifactId>
-        <version>2.1-SNAPSHOT</version>
+        <version>2.1.0</version>
     </parent>
 
     <groupId>org.apache.servicemix.specs</groupId>
     <artifactId>org.apache.servicemix.specs.stax-api-1.2</artifactId>
     <packaging>bundle</packaging>
-    <version>2.1-SNAPSHOT</version>
+    <version>2.1.0</version>
     <name>Apache ServiceMix :: Specs :: Stax API 1.2</name>
 
     <dependencies>
