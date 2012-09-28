@@ -171,12 +171,18 @@ class FactoryFinder {
                     ClassLoader classLoader = findClassLoader();
                     try {
                         // If we are deployed into an OSGi environment, leverage it
-                        Class factoryClass = FactoryFinder.class.getClassLoader().loadClass(iFactoryId);
+                        Class factoryClass = null;
+                        if (FactoryFinder.class.getClassLoader() != null) {
+                            factoryClass = FactoryFinder.class.getClassLoader().loadClass(iFactoryId);
+                        } else {
+                            factoryClass = Class.forName(iFactoryId);
+                        }
                         Class spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(factoryClass, iFactoryId);
                         if (spiClass != null) {
                             return spiClass.newInstance();
                         }
                      } catch (Throwable e) {
+                        if (debug) e.printStackTrace();
                      }
 
                     try {
