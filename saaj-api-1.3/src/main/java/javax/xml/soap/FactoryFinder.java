@@ -81,7 +81,11 @@ class FactoryFinder {
      */
     static Object find(Class factory,
                        String defaultFactoryClassName) throws SOAPException {
-        return find(factory.getName(), factory, defaultFactoryClassName);
+        String factoryPropertyName = factory.getName();
+        if ("javax.xml.soap.SAAJMetaFactory".equals(factoryPropertyName)) {
+            factoryPropertyName = "javax.xml.soap.MetaFactory";
+        }
+        return find(factoryPropertyName, factory, defaultFactoryClassName);
     }
     /**
      * Instantiates a factory object given the factory's property name and the default class name.
@@ -106,6 +110,7 @@ class FactoryFinder {
     static Object find(String factoryPropertyName,
                        Class factoryClass,
                        String defaultFactoryClassName) throws SOAPException {
+        
         try {
             // If we are deployed into an OSGi environment, leverage it
             if (factoryClass == null) {
