@@ -149,10 +149,19 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
                         if (clazz == null){
                             debugPrintln("creating factory for key: " + factoryId);
                             BufferedReader br = new BufferedReader(new InputStreamReader(u.openStream(), "UTF-8"));
-                            String factoryClassName = br.readLine();
-                            br.close();
-                            debugPrintln("factory implementation: " + factoryClassName);
-                            clazz = bundle.loadClass(factoryClassName);
+                            try {
+                                String factoryClassName = br.readLine();
+                                while (factoryClassName != null) {
+                                    factoryClassName = factoryClassName.trim();
+                                    if (factoryClassName.charAt(0) != '#') {
+                                        debugPrintln("factory implementation: " + factoryClassName);
+                                        clazz = bundle.loadClass(factoryClassName);
+                                        return clazz;
+                                    }
+                                }
+                            } finally {
+                                br.close();
+                            }
                         }
                     }
                 }
