@@ -78,6 +78,9 @@ class FactoryFinder {
                     } catch (NoSuchMethodException e) {
                         // Assume that we are running JDK 1.1, use the current ClassLoader
                         debugPrintln("assuming JDK 1.1");
+                        if (FactoryFinder.class.getClassLoader() == null) {
+                            return ClassLoader.getSystemClassLoader();
+                        }
                         return FactoryFinder.class.getClassLoader();
                     }
 

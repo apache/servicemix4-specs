@@ -155,13 +155,22 @@ final class FactoryFinder {
             // if we have no Context ClassLoader
             // so use the current ClassLoader
             classLoader = FactoryFinder.class.getClassLoader();
+            if (classLoader == null) {
+                classLoader = ClassLoader.getSystemClassLoader();
+            }
+            
         }
 
         if (debug) dPrint("find factoryId =" + factoryId);
         
         try {
             // If we are deployed into an OSGi environment, leverage it
-            Class factoryClass = FactoryFinder.class.getClassLoader().loadClass(factoryId);
+            Class factoryClass;
+            if (FactoryFinder.class.getClassLoader() != null) {
+                factoryClass = FactoryFinder.class.getClassLoader().loadClass(factoryId);
+            } else {
+                factoryClass = Class.forName(factoryId);
+            }
             Class spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(factoryClass, factoryId);
             if (spiClass != null) {
                 return spiClass.newInstance();
@@ -244,12 +253,18 @@ final class FactoryFinder {
             // If no provider found then try the current ClassLoader
             if (is == null) {
                 cl = FactoryFinder.class.getClassLoader();
+                if (cl == null) {
+                    cl = ClassLoader.getSystemClassLoader();
+                }
                 is = SecuritySupport.getResourceAsStream(cl, serviceId);
             }
         } else {
             // No Context ClassLoader, try the current
             // ClassLoader
             cl = FactoryFinder.class.getClassLoader();
+            if (cl == null) {
+                cl = ClassLoader.getSystemClassLoader();
+            }
             is = SecuritySupport.getResourceAsStream(cl, serviceId);
         }
 

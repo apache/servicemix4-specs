@@ -141,12 +141,18 @@ final public class XMLReaderFactory
                 // If no provider found then try the current ClassLoader
                 if (is == null) {
                     cl = XMLReaderFactory.class.getClassLoader();
+                    if (cl == null) {
+                        cl = ClassLoader.getSystemClassLoader();
+                    }
                     is = SecuritySupport.getResourceAsStream(cl, service);
                 }
             } else {
                 // No Context ClassLoader or JDK 1.1 so try the current
                 // ClassLoader
                 cl = XMLReaderFactory.class.getClassLoader();
+                if (cl == null) {
+                    cl = ClassLoader.getSystemClassLoader();
+                }
                 is = SecuritySupport.getResourceAsStream(cl, service);
             }
             

@@ -55,6 +55,9 @@ class FactoryFinder {
             }
             if (factory == null) {
                 classloader = FactoryFinder.class.getClassLoader();
+                if (classloader == null) {
+                    classloader = ClassLoader.getSystemClassLoader();
+                }
                 factory = classloader.loadClass(factoryClassName);
             }
             return factory.newInstance();
@@ -216,7 +219,7 @@ class FactoryFinder {
             inputstream = classloader.getResourceAsStream(factoryResource);
         }
 
-        if (inputstream == null) {
+        if (inputstream == null && FactoryFinder.class.getClassLoader() != null) {
             inputstream =
                     FactoryFinder.class.getClassLoader().getResourceAsStream(
                             factoryResource);

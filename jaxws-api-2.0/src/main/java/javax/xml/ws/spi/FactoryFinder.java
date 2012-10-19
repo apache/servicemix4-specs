@@ -76,6 +76,9 @@ class FactoryFinder {
                     } catch (NoSuchMethodException e) {
                         // Assume that we are running JDK 1.1, use the current ClassLoader
                         debugPrintln("assuming JDK 1.1");
+                        if (FactoryFinder.class.getClassLoader() == null) {
+                            return ClassLoader.getSystemClassLoader();
+                        }
                         return FactoryFinder.class.getClassLoader();
                     }
 
@@ -171,7 +174,12 @@ class FactoryFinder {
                     
 			        try {
 			            // If we are deployed into an OSGi environment, leverage it
-                        Class factoryClass = FactoryFinder.class.getClassLoader().loadClass(iFactoryId);
+                        Class factoryClass;
+                        if (FactoryFinder.class.getClassLoader() == null) {
+                            factoryClass = Class.forName(iFactoryId);
+                        } else {
+                            factoryClass = FactoryFinder.class.getClassLoader().loadClass(iFactoryId);
+                        }
                         Class spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(factoryClass, iFactoryId);
 			            if (spiClass != null) {
 			                return spiClass.newInstance();
