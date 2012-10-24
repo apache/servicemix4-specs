@@ -241,7 +241,12 @@ final class XPathFactoryFinder {
         // platform default
         if(uri.equals(XPathFactory.DEFAULT_OBJECT_MODEL_URI)) {
             if (debug) debugPrintln("attempting to use the platform default W3C DOM XPath lib");
-            return createInstance("org.apache.xpath.jaxp.XPathFactoryImpl");
+            XPathFactory f = createInstance("com.sun.org.apache.xpath.internal.jaxp.XPathFactoryImpl");
+            if (f == null) {
+                //IBM JDK
+                f = createInstance("org.apache.xpath.jaxp.XPathFactoryImpl");
+            }
+            return f;
         }
         
         if (debug) debugPrintln("all things were tried, but none was found. bailing out.");
