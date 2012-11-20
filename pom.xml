@@ -58,6 +58,7 @@
         <module>jsr311-api-1.1</module>
         <module>jsr311-api-1.1.1</module>
         <module>jsr339-api-m10</module>
+        <module>jsr339-api-m13</module>
         <module>javamail-api-1.4</module>
         <module>activation-api-1.1</module>
         <module>java-persistence-api-1.1.1</module>
