@@ -31,7 +31,7 @@
     <groupId>org.apache.servicemix.specs</groupId>
     <artifactId>specs</artifactId>
     <packaging>pom</packaging>
-    <version>2.2.0</version>
+    <version>2.3-SNAPSHOT</version>
     <name>Apache ServiceMix :: Specs</name>
     <inceptionYear>2007</inceptionYear>
 
@@ -69,9 +69,9 @@
     </modules>
 
     <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/servicemix/smx4/specs/tags/specs-2.2.0</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/servicemix/smx4/specs/tags/specs-2.2.0</developerConnection>
-        <url>http://svn.apache.org/viewvc/servicemix/smx4/specs/tags/specs-2.2.0</url>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/servicemix/smx4/specs/trunk</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/servicemix/smx4/specs/trunk</developerConnection>
+        <url>http://svn.apache.org/viewvc/servicemix/smx4/specs/trunk</url>
     </scm>
 
     <issueManagement>
