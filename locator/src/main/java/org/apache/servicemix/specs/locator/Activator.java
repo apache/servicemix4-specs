@@ -158,6 +158,7 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
                                         clazz = bundle.loadClass(factoryClassName);
                                         return clazz;
                                     }
+                                    factoryClassName = br.readLine();
                                 }
                             } finally {
                                 br.close();
