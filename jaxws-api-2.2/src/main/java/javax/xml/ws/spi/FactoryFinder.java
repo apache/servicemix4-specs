@@ -45,11 +45,21 @@ class FactoryFinder {
     /**
      * Set to true for debugging.
      */
-    private static final boolean debug = false;
+    private static final boolean debug;
+    static {
+        boolean b = false;
+        try {
+            b = Boolean.getBoolean("javax.xml.ws.spi.debug");
+        } catch (Throwable t) {
+            b = false;
+        }
+        debug = b;
+    }
+    
 
     private static void debugPrintln(String msg) {
         if (debug) {
-            System.err.println("Factory Finder:" + msg);
+            System.err.println("JAX-WS Factory Finder: " + msg);
         }
     }
 
@@ -182,7 +192,10 @@ class FactoryFinder {
                         }
                         Class spiClass = org.apache.servicemix.specs.locator.OsgiLocator.locate(factoryClass, iFactoryId);
                         if (spiClass != null) {
+                            debugPrintln("Found spiClass: " + spiClass);
                             return spiClass.newInstance();
+                        } else {
+                            debugPrintln("No spiClass found in OSGi");
                         }
                      } catch (Throwable e) {
                         if (debug) e.printStackTrace();
