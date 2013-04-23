@@ -36,7 +36,7 @@
     <dependencies>
         <dependency>
             <groupId>org.apache.servicemix.specs</groupId>
-            <artifactId>org.apache.servicemix.specs.locator</artifactId>
+            <artifactId>org.apache.servicemix.specs.activation-api-1.1</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
@@ -44,6 +44,11 @@
             <artifactId>junit</artifactId>
             <version>4.8</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.geronimo.specs</groupId>
+            <artifactId>geronimo-activation_1.1_spec</artifactId>
+            <version>1.0.2</version>
         </dependency>
     </dependencies>
 
@@ -58,6 +63,37 @@
                             <Karaf-Activator>org.apache.servicemix.specs.activator.Activator</Karaf-Activator>
                         </manifestEntries>
                     </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>create-endorsed-dir</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.apache.servicemix.specs</groupId>
+                                    <artifactId>org.apache.servicemix.specs.activation-api-1.1</artifactId>
+                                    <outputDirectory>${basedir}/target/endorsed</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <compilerArguments>
+                        <endorseddirs>${basedir}/target/endorsed</endorseddirs>
+                    </compilerArguments>
                 </configuration>
             </plugin>
         </plugins>

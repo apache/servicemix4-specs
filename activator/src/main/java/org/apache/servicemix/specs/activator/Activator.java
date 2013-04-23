@@ -17,6 +17,7 @@
 package org.apache.servicemix.specs.activator;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.Enumeration;
@@ -25,6 +26,9 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+
+import javax.activation.CommandMap;
+import javax.activation.DataContentHandler;
 
 import org.apache.servicemix.specs.locator.OsgiLocator;
 import org.osgi.framework.Bundle;
@@ -40,6 +44,8 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
     private ConcurrentMap<Long, Map<String, Callable<Class>>> factories = new ConcurrentHashMap<Long, Map<String, Callable<Class>>>();
 
     private BundleContext bundleContext;
+    
+    private Map<Long, MailCap> mailcaps = new ConcurrentHashMap<Long, MailCap>();
 
     static {
         try {
@@ -82,6 +88,7 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
         }
         debugPrintln("deactivated");
         this.bundleContext = null;
+        CommandMap.setDefaultCommandMap(null);
     }
 
     public void bundleChanged(BundleEvent event) {
@@ -117,6 +124,26 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
                 OsgiLocator.register(entry.getKey(), entry.getValue());
             }
         }
+        
+        URL url = bundle.getResource("/META-INF/mailcap");
+        if (url != null) {
+            debugPrintln("found mailcap at " + url);
+
+            try {
+                final Class<?> clazz = bundle
+                        .loadClass("javax.activation.DataContentHandler");
+                if (!clazz.isAssignableFrom(DataContentHandler.class)) {
+                    debugPrintln("incompatible DataContentHandler class in bundle "
+                            + bundle.getBundleId());
+                    return;
+                }
+            } catch (ClassNotFoundException ex) {
+                // ignored
+            }
+
+            mailcaps.put(bundle.getBundleId(), new MailCap(bundle, url));
+            rebuildCommandMap();
+        }
     }
 
     protected void unregister(long bundleId) {
@@ -126,6 +153,11 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
                 debugPrintln("unregistering service for key " + entry.getKey() + " with value " + entry.getValue());
                 OsgiLocator.unregister(entry.getKey(), entry.getValue());
             }
+        }
+        MailCap mailcap = mailcaps.remove(bundleId);
+        if (mailcap != null ){
+            debugPrintln("removing mailcap at " + mailcap.url);
+            rebuildCommandMap();
         }
     }
 
@@ -166,6 +198,46 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
                 throw e;
             }
         }
+        
+        
+        private class MimeFactoryLoader implements Callable<Class> {
+            private final String mimeType;
+            private final URL u;
+            private final Bundle bundle;
+            private volatile Class<?> clazz;
+
+            public MimeFactoryLoader(String mimeType, URL u, Bundle bundle) {
+                this.mimeType = mimeType;
+                this.u = u;
+                this.bundle = bundle;
+            }
+
+            public Class call() throws Exception {
+                try {
+                    debugPrintln("loading factory for key: " + mimeType);
+                    
+                    if (clazz == null){
+                        synchronized (this) {
+                            if (clazz == null){
+                                debugPrintln("creating factory for key: " + factoryId);
+                                BufferedReader br = new BufferedReader(new InputStreamReader(u.openStream(), "UTF-8"));
+                                String factoryClassName = br.readLine();
+                                br.close();
+                                debugPrintln("factory implementation: " + factoryClassName);
+                                clazz = bundle.loadClass(factoryClassName);
+                            }
+                        }
+                    }
+                    return clazz;
+                } catch (Exception e) {
+                    debugPrintln("exception caught while creating factory: " + e);
+                    throw e;
+                } catch (Error e) {
+                    debugPrintln("error caught while creating factory: " + e);
+                    throw e;
+                }
+            }
+        }
 
         @Override
         public String toString() {
@@ -184,6 +256,43 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
             } else {
                 return false;
             }
+        }
+    }
+    
+    private void rebuildCommandMap() {
+        ClassLoader tccl = Thread.currentThread().getContextClassLoader();
+        try {
+            Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
+            OsgiMailcapCommandMap commandMap = new OsgiMailcapCommandMap();
+            for (MailCap mailcap : mailcaps.values()) {
+                try {
+                    InputStream is = mailcap.url.openStream();
+                    try {
+                        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                        String line;
+                        while ((line = br.readLine()) != null) {
+                            commandMap.addMailcap(line, mailcap.bundle);
+                        }
+                    } finally {
+                        is.close();
+                    }
+                } catch (Exception e) {
+                    // Ignore
+                }
+            }
+            CommandMap.setDefaultCommandMap(commandMap);
+        } finally {
+            Thread.currentThread().setContextClassLoader(tccl);
+        }
+    }
+    
+    private static class MailCap {
+        Bundle bundle;
+        URL url;
+
+        private MailCap(Bundle bundle, URL url) {
+            this.bundle = bundle;
+            this.url = url;
         }
     }
 }
