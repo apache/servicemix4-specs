@@ -67,6 +67,7 @@
         <module>java-persistence-api-2.0</module>
         <module>jsr303-api-1.0.0</module>
         <module>jcr-api-2.0</module>
+        <module>annotation-api-1.2-b04</module>
         <module>assembly</module>
     </modules>
 
