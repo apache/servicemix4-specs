@@ -84,6 +84,11 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
     }
 
     public void bundleChanged(BundleEvent event) {
+        synchronized (this) {
+            if (bundleContext == null) {
+                return;
+            }
+        }
         if (event.getType() == BundleEvent.RESOLVED) {
             register(event.getBundle());
         } else if (event.getType() == BundleEvent.UNRESOLVED || event.getType() == BundleEvent.UNINSTALLED) {

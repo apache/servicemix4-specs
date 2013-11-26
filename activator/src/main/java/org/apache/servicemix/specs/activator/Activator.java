@@ -17,11 +17,14 @@
 package org.apache.servicemix.specs.activator;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -92,6 +95,11 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
     }
 
     public void bundleChanged(BundleEvent event) {
+        synchronized (this) {
+            if (bundleContext == null) {
+                return;
+            }
+        }
         if (event.getType() == BundleEvent.RESOLVED) {
             register(event.getBundle());
         } else if (event.getType() == BundleEvent.UNRESOLVED || event.getType() == BundleEvent.UNINSTALLED) {
@@ -141,7 +149,11 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
                 // ignored
             }
 
-            mailcaps.put(bundle.getBundleId(), new MailCap(bundle, url));
+            try {
+                mailcaps.put(bundle.getBundleId(), new MailCap(bundle, url));
+            } catch (IOException ex) {
+                // ignored
+            }
             rebuildCommandMap();
         }
     }
@@ -156,7 +168,7 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
         }
         MailCap mailcap = mailcaps.remove(bundleId);
         if (mailcap != null ){
-            debugPrintln("removing mailcap at " + mailcap.url);
+            debugPrintln("removing mailcap for bundle " + mailcap.bundle.getBundleId());
             rebuildCommandMap();
         }
     }
@@ -176,16 +188,26 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
         public Class call() throws Exception {
             try {
                 debugPrintln("loading factory for key: " + factoryId);
-                
+
                 if (clazz == null){
                     synchronized (this) {
                         if (clazz == null){
                             debugPrintln("creating factory for key: " + factoryId);
                             BufferedReader br = new BufferedReader(new InputStreamReader(u.openStream(), "UTF-8"));
-                            String factoryClassName = br.readLine();
-                            br.close();
-                            debugPrintln("factory implementation: " + factoryClassName);
-                            clazz = bundle.loadClass(factoryClassName);
+                            try {
+                                String factoryClassName = br.readLine();
+                                while (factoryClassName != null) {
+                                    factoryClassName = factoryClassName.trim();
+                                    if (factoryClassName.charAt(0) != '#') {
+                                        debugPrintln("factory implementation: " + factoryClassName);
+                                        clazz = bundle.loadClass(factoryClassName);
+                                        return clazz;
+                                    }
+                                    factoryClassName = br.readLine();
+                                }
+                            } finally {
+                                br.close();
+                            }
                         }
                     }
                 }
@@ -196,46 +218,6 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
             } catch (Error e) {
                 debugPrintln("error caught while creating factory: " + e);
                 throw e;
-            }
-        }
-        
-        
-        private class MimeFactoryLoader implements Callable<Class> {
-            private final String mimeType;
-            private final URL u;
-            private final Bundle bundle;
-            private volatile Class<?> clazz;
-
-            public MimeFactoryLoader(String mimeType, URL u, Bundle bundle) {
-                this.mimeType = mimeType;
-                this.u = u;
-                this.bundle = bundle;
-            }
-
-            public Class call() throws Exception {
-                try {
-                    debugPrintln("loading factory for key: " + mimeType);
-                    
-                    if (clazz == null){
-                        synchronized (this) {
-                            if (clazz == null){
-                                debugPrintln("creating factory for key: " + factoryId);
-                                BufferedReader br = new BufferedReader(new InputStreamReader(u.openStream(), "UTF-8"));
-                                String factoryClassName = br.readLine();
-                                br.close();
-                                debugPrintln("factory implementation: " + factoryClassName);
-                                clazz = bundle.loadClass(factoryClassName);
-                            }
-                        }
-                    }
-                    return clazz;
-                } catch (Exception e) {
-                    debugPrintln("exception caught while creating factory: " + e);
-                    throw e;
-                } catch (Error e) {
-                    debugPrintln("error caught while creating factory: " + e);
-                    throw e;
-                }
             }
         }
 
@@ -258,26 +240,15 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
             }
         }
     }
-    
+
     private void rebuildCommandMap() {
         ClassLoader tccl = Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
             OsgiMailcapCommandMap commandMap = new OsgiMailcapCommandMap();
             for (MailCap mailcap : mailcaps.values()) {
-                try {
-                    InputStream is = mailcap.url.openStream();
-                    try {
-                        BufferedReader br = new BufferedReader(new InputStreamReader(is));
-                        String line;
-                        while ((line = br.readLine()) != null) {
-                            commandMap.addMailcap(line, mailcap.bundle);
-                        }
-                    } finally {
-                        is.close();
-                    }
-                } catch (Exception e) {
-                    // Ignore
+                for (String line : mailcap.lines) {
+                    commandMap.addMailcap(line, mailcap.bundle);
                 }
             }
             CommandMap.setDefaultCommandMap(commandMap);
@@ -285,14 +256,24 @@ public class Activator implements BundleActivator, SynchronousBundleListener {
             Thread.currentThread().setContextClassLoader(tccl);
         }
     }
-    
+
     private static class MailCap {
         Bundle bundle;
-        URL url;
+        List<String> lines;
 
-        private MailCap(Bundle bundle, URL url) {
+        private MailCap(Bundle bundle, URL url) throws IOException {
             this.bundle = bundle;
-            this.url = url;
+            this.lines = new ArrayList<String>();
+            InputStream is = url.openStream();
+            try {
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    lines.add(line);
+                }
+            } finally {
+                is.close();
+            }
         }
     }
 }

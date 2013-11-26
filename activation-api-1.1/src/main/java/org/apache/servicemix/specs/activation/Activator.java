@@ -19,9 +19,12 @@
 package org.apache.servicemix.specs.activation;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -68,7 +71,11 @@ public class Activator extends org.apache.servicemix.specs.locator.Activator {
                 // ignored
             }
 
-            mailcaps.put(bundle.getBundleId(), new MailCap(bundle, url));
+            try {
+                mailcaps.put(bundle.getBundleId(), new MailCap(bundle, url));
+            } catch (IOException ex) {
+                // ignored
+            }
             rebuildCommandMap();
         }
     }
@@ -77,39 +84,44 @@ public class Activator extends org.apache.servicemix.specs.locator.Activator {
     protected void unregister(long bundleId) {
         MailCap mailcap = mailcaps.remove(bundleId);
         if (mailcap != null ){
-            debugPrintln("removing mailcap at " + mailcap.url);
+            debugPrintln("removing mailcap for bundle " + mailcap.bundle.getBundleId());
             rebuildCommandMap();
         }
     }
 
     private void rebuildCommandMap() {
-        OsgiMailcapCommandMap commandMap = new OsgiMailcapCommandMap();
-        for (MailCap mailcap : mailcaps.values()) {
-            try {
-                InputStream is = mailcap.url.openStream();
-                try {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
-                    String line;
-                    while ((line = br.readLine()) != null) {
-                        commandMap.addMailcap(line, mailcap.bundle);
-                    }
-                } finally {
-                    is.close();
+        ClassLoader tccl = Thread.currentThread().getContextClassLoader();
+        try {
+            Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
+            OsgiMailcapCommandMap commandMap = new OsgiMailcapCommandMap();
+            for (MailCap mailcap : mailcaps.values()) {
+                for (String line : mailcap.lines) {
+                    commandMap.addMailcap(line, mailcap.bundle);
                 }
-            } catch (Exception e) {
-                // Ignore
             }
+            CommandMap.setDefaultCommandMap(commandMap);
+        } finally {
+            Thread.currentThread().setContextClassLoader(tccl);
         }
-        CommandMap.setDefaultCommandMap(commandMap);
     }
 
     private static class MailCap {
         Bundle bundle;
-        URL url;
+        List<String> lines;
 
-        private MailCap(Bundle bundle, URL url) {
+        private MailCap(Bundle bundle, URL url) throws IOException {
             this.bundle = bundle;
-            this.url = url;
+            this.lines = new ArrayList<String>();
+            InputStream is = url.openStream();
+            try {
+                BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    lines.add(line);
+                }
+            } finally {
+                is.close();
+            }
         }
     }
 
