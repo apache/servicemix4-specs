@@ -64,6 +64,7 @@
         <module>jsr339-api-2.0</module>
         <module>javamail-api-1.4</module>
         <module>activation-api-1.1</module>
+        <module>annotation-api-1.2</module>
         <module>java-persistence-api-1.1.1</module>
         <module>java-persistence-api-2.0</module>
         <module>jsr303-api-1.0.0</module>
