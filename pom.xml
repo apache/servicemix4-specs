@@ -43,6 +43,7 @@
         <module>stax-api-1.0</module>
         <module>stax-api-1.2</module>
         <module>jain-sip-api-1.2</module>
+        <module>jain-sip-api-1.2.1</module>
         <module>jaxb-api-2.0</module>
         <module>jaxb-api-2.1</module>
         <module>jaxb-api-2.2</module>
