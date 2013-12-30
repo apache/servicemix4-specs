@@ -83,11 +83,11 @@
     </issueManagement>
 
     <prerequisites>
-        <maven>2.0.7</maven>
+        <maven>3.0.4</maven>
     </prerequisites>
 
     <properties>
-        <osgi.version>4.2.0</osgi.version>
+        <osgi.version>4.3.0</osgi.version>
     </properties>
 
     <repositories>
