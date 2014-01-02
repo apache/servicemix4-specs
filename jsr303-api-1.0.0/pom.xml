@@ -24,13 +24,13 @@
     <parent>
         <groupId>org.apache.servicemix.specs</groupId>
         <artifactId>specs</artifactId>
-        <version>2.4.0</version>
+        <version>2.5-SNAPSHOT</version>
     </parent>
     
     <groupId>org.apache.servicemix.specs</groupId>
     <artifactId>org.apache.servicemix.specs.jsr303-api-1.0.0</artifactId>
     <packaging>bundle</packaging>
-    <version>2.4.0</version>
+    <version>2.5-SNAPSHOT</version>
     <name>Apache ServiceMix :: Specs :: JSR-303 API 1.0.0</name>
     
     <dependencies>
