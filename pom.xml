@@ -97,13 +97,13 @@
         <repository>
             <id>central</id>
             <name>Default maven repo</name>
-            <url>http://repo1.maven.org/maven2</url>
+            <url>https://repo1.maven.org/maven2</url>
         </repository>
         <!-- ServiceMix repo -->
         <repository>
             <id>servicemix</id>
             <name>Apache ServiceMix Repository</name>
-            <url>http://svn.apache.org/repos/asf/servicemix/m2-repo</url>
+            <url>https://svn.apache.org/repos/asf/servicemix/m2-repo</url>
         </repository>
     </repositories>
 
@@ -112,13 +112,13 @@
         <pluginRepository>
             <id>servicemix</id>
             <name>Apache ServiceMix Repository</name>
-            <url>http://svn.apache.org/repos/asf/servicemix/m2-repo</url>
+            <url>https://svn.apache.org/repos/asf/servicemix/m2-repo</url>
         </pluginRepository>
         <!-- JApiDiff-->
         <pluginRepository>
             <id>japidiff</id>
             <name>JApiDiff Repository</name>
-            <url>http://japidiff.googlecode.com/svn/m2-repo</url>
+            <url>https://japidiff.googlecode.com/svn/m2-repo</url>
         </pluginRepository>
     </pluginRepositories>
 
